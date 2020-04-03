@@ -9,6 +9,9 @@ const routerBase =
 
 export default {
   mode: 'spa',
+  config: {
+    devtools: false
+  },
   /*
    ** Headers of the page
    */
