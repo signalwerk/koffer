@@ -1,5 +1,7 @@
 <template>
   <div class="post-it">
+    👋
+    <br />
     Hello
   </div>
 </template>
