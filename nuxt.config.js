@@ -1,3 +1,12 @@
+const routerBase =
+  process.env.DEPLOY_ENV === 'GH_PAGES'
+    ? {
+        router: {
+          base: '/koffer/'
+        }
+      }
+    : {}
+
 export default {
   mode: 'spa',
   /*
@@ -57,5 +66,7 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  }
+  },
+
+  ...routerBase
 }

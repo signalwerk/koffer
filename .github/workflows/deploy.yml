@@ -15,7 +15,7 @@ jobs:
       - name: Install and Build
         run: |
           npm install
-          npm run generate
+          npm run generate:gh-pages
 
       - name: Install SSH Client
         uses: webfactory/ssh-agent@v0.2.0
