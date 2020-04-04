@@ -4,39 +4,41 @@
 
     <transition name="section" mode="out-in">
       <page-section v-if="step === 1">
-        <h1>
+        <h1 class="bold">
           Signers Koffer
         </h1>
-        <p class="lead">
+        <p class="h2 lead">
           👋 Start right now, but first of all: What's your name?
         </p>
-        <input />
-        <button @click="step++" class="button">Submit</button>
+        <input placeholder="Name" />
+        <button @click="step++" class="button button--primary">Submit</button>
       </page-section>
     </transition>
 
     <transition name="section" mode="out-in">
       <page-section v-if="step === 2">
-        <h1>
+        <h1 class="bold">
           Name this session
         </h1>
-        <p>
+        <p class="h2 lead">
           ✍️ Let the participants know what they are working on.
         </p>
         <input />
-        <button @click="step++" class="button">Almost complete</button>
+        <button @click="step++" class="button button--primary">
+          Almost complete
+        </button>
       </page-section>
     </transition>
 
     <transition name="section" mode="out-in">
       <page-section v-if="step === 3">
-        <h1>Invite people</h1>
-        <p>
+        <h1 class="bold">Invite people</h1>
+        <p class="h2 lead">
           🚀 Create your crew
         </p>
 
         <div>
-          <h4>Send link to invite more administrators</h4>
+          <h2 class="h5 bold">Send link to invite more administrators</h2>
           <p>
             Administrators host and moderate the session.
           </p>
@@ -46,7 +48,7 @@
         </div>
 
         <div>
-          <h4>Send link to invite participants</h4>
+          <h2 class="h5 bold">Send link to invite participants</h2>
           <link-container
             link="https://signers-koffer.github.io/koffer/board/user"
           />
@@ -118,5 +120,9 @@ export default {
     transform: translateX(-30vw);
     opacity: 0;
   }
+}
+
+.lead {
+  margin-bottom: 40px;
 }
 </style>
