@@ -1,0 +1,73 @@
+.button {
+  height: 48px;
+  cursor: pointer;
+  width: 350px;
+  outline: none;
+
+  margin-top: 0;
+  margin-bottom: 20px;
+
+  &.button--primary {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    letter-spacing: -0.4px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+
+    background: $brandColor;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+    border-radius: 4px;
+    border: none;
+
+    &:disabled {
+      background: rgba(57, 133, 247, 0.48);
+    }
+
+    &:hover {
+      background: #3070D1;
+      border-radius: 4px;
+    }
+  }
+
+  &.button--secondary {
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    letter-spacing: -0.4px;
+    text-transform: uppercase;
+    color: #3070D1;
+
+    background-color: #fff;
+
+    box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.24);
+    border-radius: 4px;
+    border: 2px solid $brandColor;
+
+    &:disabled {
+      opacity: 0.48;
+    }
+
+    &:hover {
+      border: 3px solid #3070D1;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+  }
+}
+
+.text-button {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+
+  color: $brandColor;
+
+  border: none;
+  background: none;
+
+  cursor: pointer;
+}

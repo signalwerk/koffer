@@ -19,10 +19,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .progress-bar {
   height: 20px;
-  background-color: #0089f1;
+  background-color: #3985f7;
 
   transition: width 1s;
 }

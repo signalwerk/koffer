@@ -1,6 +1,6 @@
 <template>
   <div class="link-container">
-    <i class="material-icons">link</i>
+    <i class="material-icons icon--link">link</i>
     <p>
       {{ link }}
     </p>
@@ -38,7 +38,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 550px;
+  width: 650px;
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 3px 8px -4px rgba(0, 0, 0, 0.75);
