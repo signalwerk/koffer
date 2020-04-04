@@ -1,6 +1,8 @@
 # koffer
 
-> Moderationskoffer
+> «Moderationskoffer» is a german term for a briefcase with filled presentational Tools
+
+Mockup for creative collaboration tool in the context of the [versusvirus.ch](https://www.versusvirus.ch/) Hackathon
 
 ## Build Setup
 
