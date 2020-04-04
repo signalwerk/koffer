@@ -18,7 +18,9 @@
           <input
             ref="inputText"
             v-else
+            @click="handleInputClick"
             @keydown.enter="handleEditEnd"
+            @blur="handleEditEnd"
             :value="value.text"
           />
         </label>
@@ -70,6 +72,11 @@ export default {
         text: this.$refs.inputText.value
       })
     },
+    handleInputClick() {
+      this.$nextTick(() => {
+        this.$refs.inputText.focus()
+      })
+    },
     handleDrag({ target, top: y, left: x, transform }) {
       target.style.transform = transform
       this.$store.dispatch('cards/updateCardPosition', {
@@ -104,6 +111,7 @@ $button-size: 22px;
     background-color: #fefac7;
   }
   &.is-editing {
+    z-index: 1;
     box-shadow: 15px 3px 25px rgba(100, 100, 100, 0.4);
   }
 }
