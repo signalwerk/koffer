@@ -10,7 +10,7 @@
         <p class="h2 lead">
           👋 Start right now, but first of all: What's your name?
         </p>
-        <input placeholder="Name" />
+        <input placeholder="Name" v-model="userName" />
         <button @click="step++" class="button button--primary">Submit</button>
       </page-section>
     </transition>
@@ -23,8 +23,8 @@
         <p class="h2 lead">
           ✍️ Let the participants know what they are working on.
         </p>
-        <input />
-        <button @click="step++" class="button button--primary">
+        <input placeholder="" v-model="sessionName" />
+        <button @click="persistSettings" class="button button--primary">
           Almost complete
         </button>
       </page-section>
@@ -83,7 +83,9 @@ export default {
 
   data() {
     return {
-      step: 1
+      step: 1,
+      userName: '',
+      sessionName: ''
     }
   },
 
@@ -92,6 +94,17 @@ export default {
       const maxSteps = 3
 
       return this.step / maxSteps
+    }
+  },
+
+  methods: {
+    persistSettings() {
+      this.$store.dispatch('session/setSettings', {
+        userName: this.userName,
+        sessionName: this.sessionName
+      })
+
+      this.step++
     }
   }
 }

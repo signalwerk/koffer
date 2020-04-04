@@ -11,7 +11,6 @@
         />
       </div>
     </div>
-    <button @click="addCard" class="Button--addCard">Add new card</button>
   </div>
 </template>
 
@@ -59,9 +58,6 @@ export default {
   box-sizing: border-box;
 }
 .Board {
-  position: relative;
-  height: 100vh;
-  width: 100vw;
   background-color: #f8f8fc;
 }
 .CardList {
@@ -72,7 +68,7 @@ export default {
 .Button--addCard {
   position: absolute;
   font-size: 21px;
-  left: 0;
-  top: 0;
+  left: 200px;
+  top: 200px;
 }
 </style>
