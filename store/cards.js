@@ -73,6 +73,8 @@ export const mutations = {
    * @param id
    */
   deleteCard(state, id) {
-    delete state.cards[id]
+    const { [id]: removedId, ...newCards } = state.cards
+    state.cards = newCards
+    // delete state.cards[id]
   }
 }
