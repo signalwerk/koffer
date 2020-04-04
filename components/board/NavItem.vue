@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-item" @click="$emit('click')">
+  <div @click="$emit('click')" class="nav-item">
     <icon :is-active="isActive" :icon="icon" size="xl" />
   </div>
 </template>
