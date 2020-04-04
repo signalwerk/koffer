@@ -42,12 +42,12 @@ export default {
         text: this.$refs.text.value
       })
     },
-    handleDrag({ target, translate, transform }) {
+    handleDrag({ target, top, left, transform }) {
       target.style.transform = transform
-      this.$store.dispatch('updateCardPosition', {
+      this.$store.dispatch('cards/updateCardPosition', {
         id: this.value.id,
-        x: translate[0],
-        y: translate[1]
+        x: top,
+        y: left
       })
     }
   }

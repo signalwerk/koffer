@@ -54,7 +54,7 @@ export const mutations = {
 
   /**
    * Update a given specific card
-   * @param state
+   * @param id
    * @param index
    * @param card
    */
@@ -70,9 +70,9 @@ export const mutations = {
   /**
    * Delete a specific card
    * @param state
-   * @param index
+   * @param id
    */
-  deleteCard(state, index) {
-    state.splice(index, 1)
+  deleteCard(state, id) {
+    delete state.cards[id]
   }
 }
