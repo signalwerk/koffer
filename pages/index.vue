@@ -2,7 +2,7 @@
   <div class="page-section-container">
     <progress-bar :amount="progress" class="page-progress" />
 
-    <transition name="section" mode="out-in">
+    <transition name="slide" mode="out-in">
       <page-section v-if="step === 1">
         <h1 class="bold">
           Signers Koffer
@@ -15,7 +15,7 @@
       </page-section>
     </transition>
 
-    <transition name="section" mode="out-in">
+    <transition name="slide" mode="out-in">
       <page-section v-if="step === 2">
         <h1 class="bold">
           Name this session
@@ -30,7 +30,7 @@
       </page-section>
     </transition>
 
-    <transition name="section" mode="out-in">
+    <transition name="slide" mode="out-in">
       <page-section v-if="step === 3">
         <h1 class="bold">Invite people</h1>
         <p class="h2 lead">
@@ -53,6 +53,16 @@
             link="https://signers-koffer.github.io/koffer/board/user"
           />
         </div>
+
+        <div>
+          <nuxt-link
+            to="/board"
+            tag="button"
+            class="button button--primary done-button"
+          >
+            Done
+          </nuxt-link>
+        </div>
       </page-section>
     </transition>
   </div>
@@ -65,6 +75,11 @@ import LinkContainer from '~/components/LinkContainer.vue'
 
 export default {
   components: { ProgressBar, PageSection, LinkContainer },
+
+  transition: {
+    name: 'slide-fade',
+    mode: 'out-in'
+  },
 
   data() {
     return {
@@ -94,35 +109,12 @@ export default {
   position: relative;
 }
 
-.section-enter-active {
-  animation: slideIn 1s;
-}
-.section-leave-active {
-  animation: slideOut 1s;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(30vw);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-@keyframes slideOut {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(-30vw);
-    opacity: 0;
-  }
-}
-
 .lead {
   margin-bottom: 40px;
+}
+
+.done-button {
+  margin-top: 40px;
+  width: 100px;
 }
 </style>

@@ -8,6 +8,11 @@
 import Board from '~/components/Board.vue'
 
 export default {
-  components: { Board }
+  components: { Board },
+
+  transition: {
+    name: 'slide-fade',
+    mode: 'out-in'
+  }
 }
 </script>
