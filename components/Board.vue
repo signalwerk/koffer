@@ -1,11 +1,12 @@
 <template>
   <div>
-    <div v-for="(card, index) in cards">
+    <div v-for="(card, id) in cards">
       <card
         :value="card"
-        @input="(e) => updateCard(index, e)"
-        @delete="deleteCard(index)"
-        :key="index"
+        @drag="(card) => updateCardPosition(id, card)"
+        @input="(e) => updateCard(id, e)"
+        @delete="deleteCard(id)"
+        :key="id"
       />
     </div>
     <button @click="addCard">Add new card</button>
@@ -13,8 +14,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import Card from '~/components/Card'
+const { mapState } = createNamespacedHelpers('cards')
 
 export default {
   components: { Card },
@@ -28,15 +30,23 @@ export default {
       this.$store.dispatch('cards/addCard')
     },
 
-    deleteCard(index) {
-      this.$store.dispatch('cards/deleteCard', index)
-    },
-
-    updateCard(index, card) {
+    updateCard(id, card) {
       this.$store.dispatch('cards/updateCard', {
-        index,
+        id,
         card
       })
+    },
+
+    updateCardPosition(id, x, y) {
+      this.$store.dispatch('cards/updateCardPosition', {
+        id,
+        x,
+        y
+      })
+    },
+
+    deleteCard(id) {
+      this.$store.dispatch('cards/deleteCard', id)
     }
   }
 }

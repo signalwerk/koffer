@@ -1,4 +1,8 @@
-export const state = () => []
+import { v4 as uuidv4 } from 'uuid'
+
+export const state = () => ({
+  cards: {}
+})
 
 export const actions = {
   addCard({ commit, dispatch }) {
@@ -8,6 +12,11 @@ export const actions = {
 
   updateCard({ commit, dispatch }, payload) {
     commit('updateCard', payload)
+    dispatch('push')
+  },
+
+  updateCardPosition({ commit, dispatch }, payload) {
+    commit('updateCardPosition', payload)
     dispatch('push')
   },
 
@@ -33,29 +42,41 @@ export const mutations = {
    * @param state
    */
   addCard(state) {
-    state.push({
-      x: 0,
-      y: 0,
-      text: ''
-    })
+    const id = uuidv4()
+    state.cards = {
+      ...state.cards,
+      [id]: {
+        id,
+        x: 0,
+        y: 0,
+        text: ''
+      }
+    }
   },
 
   /**
    * Update a given specific card
-   * @param state
+   * @param id
    * @param index
    * @param card
    */
-  updateCard(state, { index, card }) {
-    state[index] = card
+  updateCard(state, { id, card }) {
+    state.cards[id] = card
+  },
+
+  updateCardPosition(state, { id, x, y }) {
+    state.cards[id].x = x
+    state.cards[id].y = y
   },
 
   /**
    * Delete a specific card
    * @param state
-   * @param index
+   * @param id
    */
-  deleteCard(state, index) {
-    state.splice(index, 1)
+  deleteCard(state, id) {
+    const { [id]: removedId, ...newCards } = state.cards
+    state.cards = newCards
+    // delete state.cards[id]
   }
 }

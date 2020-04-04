@@ -3,7 +3,12 @@
     <div class="Card">
       <button @click="$emit('delete')">Delete</button>
       <div>
-        <span>@({{ value.x }}/{{ value.y }})</span>
+        <details>
+          <summary>info</summary>
+          <code>
+            <pre>{{ JSON.stringify(value, null, 2) }}</pre>
+          </code>
+        </details>
         <label>
           Text: <input ref="text" :value="value.text" @input="handleInput" />
         </label>
@@ -23,24 +28,17 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => ({
-        x: this.$store.card.x,
-        y: this.$store.card.y,
-        text: ''
-      })
+      default: () => ({})
     }
   },
   data: () => ({
+    initialPos: {
+      x: 0,
+      y: 0
+    },
     moveable: {
       draggable: true,
-      throttleDrag: 0,
-      resizable: false,
-      throttleResize: 1,
-      keepRatio: true,
-      scalable: false,
-      throttleScale: 0,
-      rotatable: false,
-      throttleRotate: 0
+      throttleDrag: 0
     }
   }),
   methods: {
@@ -49,12 +47,12 @@ export default {
         text: this.$refs.text.value
       })
     },
-    handleDrag({ target, left, top }) {
-      target.style.transform = `translate3d(${left}px, ${top}px, 0)`
-      this.$store.commit({
-        type: 'card/drag',
-        x: left,
-        y: top
+    handleDrag({ target, top, left, transform }) {
+      target.style.transform = transform
+      this.$store.dispatch('cards/updateCardPosition', {
+        id: this.value.id,
+        x: top,
+        y: left
       })
     }
   }
