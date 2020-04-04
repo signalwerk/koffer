@@ -6,7 +6,20 @@ export const state = () => ({
 
 export const actions = {
   addCard({ commit, dispatch }) {
-    commit('addCard')
+    const id = uuidv4()
+
+    const card = {
+      id,
+      x: 0,
+      y: 0,
+      text: ''
+    }
+
+    dispatch('socket/card', {
+      ...card
+    })
+
+    commit('addCard', card)
     dispatch('push')
   },
 
@@ -45,16 +58,10 @@ export const mutations = {
    * Adds a new blank card
    * @param state
    */
-  addCard(state) {
-    const id = uuidv4()
+  addCard(state, card) {
     state.cards = {
       ...state.cards,
-      [id]: {
-        id,
-        x: 0,
-        y: 0,
-        text: ''
-      }
+      [card.id]: card
     }
   },
 
