@@ -32,7 +32,10 @@
       />
     </aside>
 
-    <stop-watch v-if="hasStopwatch" class="stopwatch" />
+    <transition name="fade-fast">
+      <stop-watch v-if="hasStopwatch" class="stopwatch" />
+    </transition>
+
     <board ref="board" class="board" />
   </div>
 </template>
