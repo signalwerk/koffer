@@ -23,7 +23,7 @@
       </div>
     </aside>
 
-    <board ref="board" />
+    <board ref="board" class="board" />
   </div>
 </template>
 
@@ -101,5 +101,9 @@ export default {
     margin-bottom: 20px;
     cursor: pointer;
   }
+}
+
+.board {
+  overflow: hidden;
 }
 </style>
