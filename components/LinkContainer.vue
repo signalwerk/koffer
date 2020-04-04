@@ -27,6 +27,9 @@ export default {
     async copyLink() {
       try {
         await this.$copyText(this.link)
+        this.$toast.success('Copied', {
+          duration: 3000
+        })
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e)
