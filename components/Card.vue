@@ -1,14 +1,19 @@
 <template>
-  <Moveable ref="moveable" v-bind="moveable" @drag="handleDrag" class="Card">
+  <Moveable
+    ref="moveable"
+    v-bind="moveable"
+    @drag="handleDrag"
+    :class="[isEditing ? 'is-editing' : '']"
+    class="Card"
+  >
     <div class="Card--inner">
       <button @click="$emit('delete')">
         <icon icon="close" size="small" />
       </button>
       <div>
         <label>
-          Text:
           <div v-if="!isEditing" @click="handleEditStart">
-            e: {{ value.text }}
+            <icon icon="draw" size="small" />: {{ value.text }}
           </div>
           <input
             ref="inputText"
@@ -19,7 +24,7 @@
         </label>
       </div>
       <details>
-        <summary>info</summary>
+        <summary>[i]</summary>
         <code>
           <pre>{{ JSON.stringify(value, null, 2) }}</pre>
         </code>
@@ -90,18 +95,26 @@ $button-size: 22px;
   position: absolute;
   width: $size;
   height: $size;
-  padding: 20px;
+  box-shadow: 0 0 0 rgba(100, 100, 100, 0.4);
+  transition: box-shadow 300ms ease-in-out;
 
   &--inner {
+    padding: 20px;
     height: 100%;
     background-color: #fefac7;
+  }
+  &.is-editing {
+    box-shadow: 15px 3px 25px rgba(100, 100, 100, 0.4);
   }
 }
 
 input {
   width: auto;
-  margin: 20px;
   display: block;
+  font: inherit;
+  text-transform: inherit;
+  background-color: transparent;
+  border-color: black;
 }
 
 button {
