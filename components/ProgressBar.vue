@@ -24,6 +24,6 @@ export default {
   height: 20px;
   background-color: #0089f1;
 
-  transition: width ease-in-out 0.5s;
+  transition: width ease-in-out 1s;
 }
 </style>
