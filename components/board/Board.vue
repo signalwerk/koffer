@@ -11,17 +11,21 @@
         />
       </div>
     </div>
-    <button @click="addCard" class="Button--addCard">Add new card</button>
+    <button @click="addCard" class="Button--addCard">
+      <icon icon="draw" size="small" />
+    </button>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import Card from '~/components/Card'
+import Icon from '~/components/Icon'
+import Card from '~/components/board/Card'
+
 const { mapState } = createNamespacedHelpers('cards')
 
 export default {
-  components: { Card },
+  components: { Card, Icon },
 
   computed: {
     ...mapState(['cards'])
@@ -59,9 +63,6 @@ export default {
   box-sizing: border-box;
 }
 .Board {
-  position: relative;
-  height: 100vh;
-  width: 100vw;
   background-color: #f8f8fc;
 }
 .CardList {
@@ -72,7 +73,7 @@ export default {
 .Button--addCard {
   position: absolute;
   font-size: 21px;
-  left: 0;
-  top: 0;
+  left: 200px;
+  top: 200px;
 }
 </style>

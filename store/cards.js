@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { throttle } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -73,9 +74,10 @@ export const mutations = {
     state.cards[id].text = text
   },
 
-  updateCardPosition(state, { id, x, y }) {
+  updateCardPosition(state, { id, x, y, transform }) {
     state.cards[id].x = x
     state.cards[id].y = y
+    state.cards[id].transform = transform
   },
 
   /**
@@ -84,8 +86,9 @@ export const mutations = {
    * @param id
    */
   deleteCard(state, id) {
-    const { [id]: removedId, ...newCards } = state.cards
-    state.cards = newCards
+    // const { [id]: removedCard, ...newCards } = state.cards
+    // state.cards = newCards
+    Vue.delete(state.cards, id)
     // delete state.cards[id]
   }
 }
