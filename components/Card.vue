@@ -7,7 +7,15 @@
       <div>
         <label>
           Text:
-          <input ref="inputText" :value="value.text" @input="handleInput" />
+          <div v-if="!isEditing" @click="handleEditStart">
+            e: {{ value.text }}
+          </div>
+          <input
+            ref="inputText"
+            v-else
+            @keydown.enter="handleEditEnd"
+            :value="value.text"
+          />
         </label>
       </div>
       <details>
@@ -37,6 +45,7 @@ export default {
     }
   },
   data: () => ({
+    isEditing: false,
     moveable: {
       draggable: true,
       throttleDrag: 0
@@ -46,8 +55,12 @@ export default {
     this.$refs.moveable.$el.style.transform = this.value.transform
   },
   methods: {
-    handleInput() {
-      this.$store.dispatch('cards/updateContent', {
+    handleEditStart() {
+      this.isEditing = true
+    },
+    handleEditEnd() {
+      this.isEditing = false
+      this.$store.dispatch('cards/updateCardContent', {
         id: this.value.id,
         text: this.$refs.inputText.value
       })
