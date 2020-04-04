@@ -105,17 +105,6 @@ export default {
 }
 
 .header {
-  background-color: #3985f7;
-  color: #fff;
-  height: 56px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
-  z-index: 99999;
-  position: relative;
-
   grid-area: header;
 }
 
