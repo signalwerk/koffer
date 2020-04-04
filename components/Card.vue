@@ -3,16 +3,17 @@
     <div class="Card">
       <button @click="$emit('delete')">Delete</button>
       <div>
-        <details>
-          <summary>info</summary>
-          <code>
-            <pre>{{ JSON.stringify(value, null, 2) }}</pre>
-          </code>
-        </details>
         <label>
-          Text: <input ref="text" :value="value.text" @input="handleInput" />
+          Text:
+          <input ref="inputText" :value="value.text" @input="handleInput" />
         </label>
       </div>
+      <details>
+        <summary>info</summary>
+        <code>
+          <pre>{{ JSON.stringify(value, null, 2) }}</pre>
+        </code>
+      </details>
     </div>
   </Moveable>
 </template>
@@ -43,8 +44,9 @@ export default {
   }),
   methods: {
     handleInput() {
-      this.$emit('input', {
-        text: this.$refs.text.value
+      this.$store.dispatch('cards/updateContent', {
+        id: this.value.id,
+        text: this.$refs.inputText.value
       })
     },
     handleDrag({ target, top, left, transform }) {
@@ -60,10 +62,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+* {
+  box-sizing: border-box;
+}
+$size: 250px;
+
 .Card {
-  $size: 250px;
   width: $size;
   height: $size;
   background-color: palegoldenrod;
+  margin: 20px;
+}
+
+input {
+  width: auto;
+  margin: 20px;
+  display: block;
+}
+
+.moveable {
+  display: inline-block;
 }
 </style>

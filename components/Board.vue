@@ -4,7 +4,7 @@
       <card
         :value="card"
         @drag="(card) => updateCardPosition(id, card)"
-        @input="(e) => updateCard(id, e)"
+        @input="(card) => updateCardContent(id, card)"
         @delete="deleteCard(id)"
         :key="id"
       />
@@ -30,10 +30,10 @@ export default {
       this.$store.dispatch('cards/addCard')
     },
 
-    updateCard(id, card) {
-      this.$store.dispatch('cards/updateCard', {
+    updateCardContent(id, text) {
+      this.$store.dispatch('cards/updateCardContent', {
         id,
-        card
+        text
       })
     },
 
