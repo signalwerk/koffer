@@ -32,7 +32,8 @@ input {
 
   margin-bottom: 20px;
 }
-button {
+
+.button {
   border-radius: 2px;
   width: 350px;
   padding: 10px;
@@ -42,10 +43,18 @@ button {
   text-transform: uppercase;
   color: #fff;
   font-weight: 700;
-  box-shadow: 0px 3px 8px -4px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 3px 8px -4px rgba(0, 0, 0, 0.75);
 
   margin-bottom: 20px;
 
   cursor: pointer;
+}
+.text-button {
+  color: #0089f1;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
 }
 </style>

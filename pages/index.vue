@@ -8,24 +8,49 @@
           Signers Koffer
         </h1>
         <p class="lead">
-          Start right now, but first of all: What's your name?
+          👋 Start right now, but first of all: What's your name?
         </p>
         <input />
-        <button @click="step++">Submit</button>
+        <button @click="step++" class="button">Submit</button>
       </page-section>
     </transition>
 
     <transition name="section" mode="out-in">
       <page-section v-if="step === 2">
-        <h1>Step 2</h1>
-        <button @click="step++">Submit</button>
+        <h1>
+          Name this session
+        </h1>
+        <p>
+          ✍️ Let the participants know what they are working on.
+        </p>
+        <input />
+        <button @click="step++" class="button">Almost complete</button>
       </page-section>
     </transition>
 
     <transition name="section" mode="out-in">
       <page-section v-if="step === 3">
-        <h1>Step 3</h1>
-        <button @click="step++">Submit</button>
+        <h1>Invite people</h1>
+        <p>
+          🚀 Create your crew
+        </p>
+
+        <div>
+          <h4>Send link to invite more administrators</h4>
+          <p>
+            Administrators host and moderate the session.
+          </p>
+          <link-container
+            link="https://signers-koffer.github.io/koffer/board/admin"
+          />
+        </div>
+
+        <div>
+          <h4>Send link to invite participants</h4>
+          <link-container
+            link="https://signers-koffer.github.io/koffer/board/user"
+          />
+        </div>
       </page-section>
     </transition>
   </div>
@@ -34,9 +59,10 @@
 <script>
 import ProgressBar from '~/components/ProgressBar.vue'
 import PageSection from '~/components/PageSection.vue'
+import LinkContainer from '~/components/LinkContainer.vue'
 
 export default {
-  components: { ProgressBar, PageSection },
+  components: { ProgressBar, PageSection, LinkContainer },
 
   data() {
     return {
@@ -48,7 +74,7 @@ export default {
     progress() {
       const maxSteps = 3
 
-      return this.step / (maxSteps + 1)
+      return this.step / maxSteps
     }
   }
 }

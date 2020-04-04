@@ -54,7 +54,9 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'nuxt-material-design-icons',
+    'nuxt-clipboard2'
   ],
   /*
    ** Axios module configuration
