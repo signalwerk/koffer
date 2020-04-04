@@ -22,3 +22,13 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
+## Start debugging socket server
+
+```bash
+cd test-server
+npm i
+node .
+```
+
+Make sure to first start the server and then nuxt, otherwise there's a conflict with the port.

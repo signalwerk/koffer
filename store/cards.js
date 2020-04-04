@@ -1,13 +1,4 @@
-import debounce from 'lodash.debounce'
-
-const debouncedPush = debounce((state) => {
-  // eslint-disable-next-line no-console
-  console.log('[PUSH]', state)
-}, 1000)
-
-export const state = () => ({
-  cards: []
-})
+export const state = () => []
 
 export const actions = {
   addCard({ commit, dispatch }) {
@@ -25,8 +16,14 @@ export const actions = {
     dispatch('push')
   },
 
-  push({ state }) {
-    debouncedPush(state)
+  push({ state, dispatch }) {
+    dispatch(
+      'socket/emit',
+      {
+        cards: state
+      },
+      { root: true }
+    )
   }
 }
 
@@ -36,7 +33,7 @@ export const mutations = {
    * @param state
    */
   addCard(state) {
-    state.cards.push({
+    state.push({
       x: 0,
       y: 0,
       text: ''
@@ -50,7 +47,7 @@ export const mutations = {
    * @param card
    */
   updateCard(state, { index, card }) {
-    state.cards[index] = card
+    state[index] = card
   },
 
   /**
@@ -59,6 +56,6 @@ export const mutations = {
    * @param index
    */
   deleteCard(state, index) {
-    state.cards.splice(index, 1)
+    state.splice(index, 1)
   }
 }
