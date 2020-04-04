@@ -32,6 +32,10 @@
       />
     </aside>
 
+    <transition name="fade-fast">
+      <stop-watch v-if="hasStopwatch" class="stopwatch" />
+    </transition>
+
     <board ref="board" class="board" />
   </div>
 </template>
@@ -40,9 +44,10 @@
 import { mapState } from 'vuex'
 import Board from '~/components/board/Board.vue'
 import NavItem from '~/components/board/NavItem.vue'
+import StopWatch from '~/components/board/StopWatch.vue'
 
 export default {
-  components: { NavItem, Board },
+  components: { NavItem, Board, StopWatch },
 
   transition: {
     name: 'slide-fade',
@@ -52,6 +57,7 @@ export default {
   data() {
     return {
       activeTool: 'select',
+      hasStopwatch: false,
       navItems: [
         { item: 'select', handler: () => {} },
         { item: 'artboard', handler: () => {} },
@@ -60,7 +66,7 @@ export default {
         { item: 'shape', handler: this.addShape },
         { item: 'draw', handler: () => {} },
         { item: 'eraser', handler: () => {} },
-        { item: 'stopwatch', handler: () => {} }
+        { item: 'stopwatch', handler: this.toggleStopwatch }
       ]
     }
   },
@@ -75,6 +81,10 @@ export default {
     },
     addSticky() {
       this.$refs.board.addCard()
+    },
+
+    toggleStopwatch() {
+      this.hasStopwatch = !this.hasStopwatch
     }
   }
 }
@@ -133,5 +143,13 @@ export default {
 
 .board {
   overflow: hidden;
+}
+
+.stopwatch {
+  position: fixed;
+  z-index: 99999;
+  top: 80px;
+  left: calc(50% + 80px);
+  transform: translateX(-50%);
 }
 </style>
