@@ -11,21 +11,17 @@
         />
       </div>
     </div>
-    <button @click="addCard" class="Button--addCard">
-      <icon icon="draw" size="small" />
-    </button>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import Icon from '~/components/Icon'
 import Card from '~/components/board/Card'
 
 const { mapState } = createNamespacedHelpers('cards')
 
 export default {
-  components: { Card, Icon },
+  components: { Card },
 
   computed: {
     ...mapState(['cards'])

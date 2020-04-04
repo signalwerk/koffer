@@ -131,18 +131,22 @@ export default {
 </script>
 <style lang="scss">
 .icon {
+  &.icon--small,
   &.icon--small img {
     width: 14px;
     height: 14px;
   }
+  &.icon--medium,
   &.icon--medium img {
     width: 20px;
     height: 20px;
   }
+  &.icon--large,
   &.icon--large img {
     width: 26px;
     height: 26px;
   }
+  &.icon--xl,
   &.icon--xl img {
     width: 32px;
     height: 32px;
