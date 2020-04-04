@@ -94,7 +94,11 @@ export default {
 
   display: grid;
   grid-template-columns: 80px auto;
-  grid-template-rows: 56px auto;
+  grid-template-rows: 56px calc(100vh - 56px);
+
+  grid-template-areas:
+    'header header'
+    'sidebar main';
 }
 
 .header {
@@ -109,8 +113,7 @@ export default {
   z-index: 99999;
   position: relative;
 
-  grid-column-start: 1;
-  grid-column-end: span 2;
+  grid-area: header;
 }
 
 .invite-button {
@@ -124,11 +127,8 @@ export default {
 }
 
 .nav {
-  grid-column-start: 1;
-  grid-column-end: 1;
-  grid-row-start: 2;
+  grid-area: sidebar;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
 
@@ -136,10 +136,23 @@ export default {
     margin-bottom: 20px;
     cursor: pointer;
   }
+
+  overflow-y: auto;
+  height: calc(100vh - 56px);
+
+  @media only screen and (min-height: 700px) {
+    overflow-y: visible;
+    justify-content: center;
+  }
+
+  .nav-item:first-child {
+    margin-top: 40px;
+  }
 }
 
 .board {
   overflow: hidden;
+  grid-area: main;
 }
 
 .stopwatch {
