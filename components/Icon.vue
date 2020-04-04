@@ -144,8 +144,8 @@ export default {
     height: 26px;
   }
   &.icon--xl img {
-    width: 50px;
-    height: 50px;
+    width: 32px;
+    height: 32px;
   }
 }
 </style>

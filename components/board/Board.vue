@@ -16,7 +16,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import Card from '~/components/Card'
+import Card from '~/components/board/Card'
+
 const { mapState } = createNamespacedHelpers('cards')
 
 export default {

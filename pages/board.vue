@@ -18,9 +18,18 @@
     </header>
 
     <aside class="nav">
-      <div @click="addSticky">
-        <icon :is-active="false" icon="sticky-note" size="xl" />
-      </div>
+      <nav-item
+        v-for="(navItem, index) in navItems"
+        :key="index"
+        :is-active="activeTool === navItem.item"
+        :icon="navItem.item"
+        @click="
+          () => {
+            activeTool = navItem.item
+            navItem.handler()
+          }
+        "
+      />
     </aside>
 
     <board ref="board" class="board" />
@@ -29,15 +38,31 @@
 
 <script>
 import { mapState } from 'vuex'
-import Board from '~/components/Board.vue'
-import Icon from '~/components/Icon.vue'
+import Board from '~/components/board/Board.vue'
+import NavItem from '~/components/board/NavItem.vue'
 
 export default {
-  components: { Board, Icon },
+  components: { NavItem, Board },
 
   transition: {
     name: 'slide-fade',
     mode: 'out-in'
+  },
+
+  data() {
+    return {
+      activeTool: 'select',
+      navItems: [
+        { item: 'select', handler: () => {} },
+        { item: 'artboard', handler: () => {} },
+        { item: 'sticky-note', handler: this.addSticky },
+        { item: 'text', handler: () => {} },
+        { item: 'shape', handler: () => {} },
+        { item: 'draw', handler: () => {} },
+        { item: 'eraser', handler: () => {} },
+        { item: 'stopwatch', handler: () => {} }
+      ]
+    }
   },
 
   computed: {
