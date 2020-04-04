@@ -1,5 +1,5 @@
 <template>
-  <Moveable v-bind="moveable" @drag="handleDrag" class="moveable Card">
+  <Moveable ref="moveable" v-bind="moveable" @drag="handleDrag" class="Card">
     <div class="Card--inner">
       <button @click="$emit('delete')">Delete</button>
       <div>
@@ -33,15 +33,14 @@ export default {
     }
   },
   data: () => ({
-    initialPos: {
-      x: 0,
-      y: 0
-    },
     moveable: {
       draggable: true,
       throttleDrag: 0
     }
   }),
+  mounted() {
+    this.$refs.moveable.$el.style.transform = this.value.transform
+  },
   methods: {
     handleInput() {
       this.$store.dispatch('cards/updateContent', {
@@ -49,12 +48,13 @@ export default {
         text: this.$refs.inputText.value
       })
     },
-    handleDrag({ target, top, left, transform }) {
+    handleDrag({ target, top: y, left: x, transform }) {
       target.style.transform = transform
       this.$store.dispatch('cards/updateCardPosition', {
         id: this.value.id,
-        x: top,
-        y: left
+        transform,
+        x,
+        y
       })
     }
   }
