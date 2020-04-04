@@ -1,11 +1,12 @@
 <template>
   <div>
-    <div v-for="(card, index) in cards">
+    <div v-for="(card, id) in cards">
       <card
         :value="card"
-        @input="(e) => updateCard(index, e)"
-        @delete="deleteCard(index)"
-        :key="index"
+        @drag="(card) => updateCardPosition(id, card)"
+        @input="(e) => updateCard(id, e)"
+        @delete="deleteCard(id)"
+        :key="id"
       />
     </div>
     <button @click="addCard">Add new card</button>
@@ -34,6 +35,13 @@ export default {
 
     updateCard(index, card) {
       this.$store.dispatch('updateCard', {
+        index,
+        card
+      })
+    },
+
+    updateCardPosition(index, card) {
+      this.$store.dispatch('updateCardPosition', {
         index,
         card
       })

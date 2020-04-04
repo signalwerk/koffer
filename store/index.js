@@ -6,7 +6,7 @@ const debouncedPush = debounce((state) => {
 }, 1000)
 
 export const state = () => ({
-  cards: []
+  cards: {}
 })
 
 export const actions = {
@@ -17,6 +17,11 @@ export const actions = {
 
   updateCard({ commit, dispatch }, payload) {
     commit('updateCard', payload)
+    dispatch('push')
+  },
+
+  updateCardPosition({ commit, dispatch }, payload) {
+    commit('updateCardPosition', payload)
     dispatch('push')
   },
 
@@ -36,11 +41,13 @@ export const mutations = {
    * @param state
    */
   addCard(state) {
-    state.cards.push({
+    const id = Math.floor(Math.random() * 10000)
+    state.cards[id] = {
+      id,
       x: 0,
       y: 0,
       text: ''
-    })
+    }
   },
 
   /**
@@ -49,8 +56,13 @@ export const mutations = {
    * @param index
    * @param card
    */
-  updateCard(state, { index, card }) {
-    state.cards[index] = card
+  updateCard(state, { id, card }) {
+    state.cards[id] = card
+  },
+
+  updateCardPosition(state, { id, x, y }) {
+    state.cards[id].x += x
+    state.cards[id].y += y
   },
 
   /**
