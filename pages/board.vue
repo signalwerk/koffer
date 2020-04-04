@@ -33,7 +33,7 @@
     </aside>
 
     <transition name="fade-fast">
-      <stop-watch v-if="hasStopwatch" class="stopwatch" />
+      <stop-watch v-show="hasStopwatch" class="stopwatch" />
     </transition>
 
     <board ref="board" class="board" />
