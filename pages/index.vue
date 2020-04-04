@@ -1,59 +1,96 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        koffer
-      </h1>
-      <h2 class="subtitle">
-        Moderationskoffer
-      </h2>
-      <board />
-    </div>
+  <div class="page-section-container">
+    <progress-bar :amount="progress" class="page-progress" />
+
+    <transition name="section" mode="out-in">
+      <page-section v-if="step === 1">
+        <h1>
+          Signers Koffer
+        </h1>
+        <p class="lead">
+          Start right now, but first of all: What's your name?
+        </p>
+        <input />
+        <button @click="step++">Submit</button>
+      </page-section>
+    </transition>
+
+    <transition name="section" mode="out-in">
+      <page-section v-if="step === 2">
+        <h1>Step 2</h1>
+        <button @click="step++">Submit</button>
+      </page-section>
+    </transition>
+
+    <transition name="section" mode="out-in">
+      <page-section v-if="step === 3">
+        <h1>Step 3</h1>
+        <button @click="step++">Submit</button>
+      </page-section>
+    </transition>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import Board from '~/components/Board.vue'
+import ProgressBar from '~/components/ProgressBar.vue'
+import PageSection from '~/components/PageSection.vue'
 
 export default {
-  components: {
-    Logo,
-    Board
+  components: { ProgressBar, PageSection },
+
+  data() {
+    return {
+      step: 1
+    }
+  },
+
+  computed: {
+    progress() {
+      const maxSteps = 3
+
+      return this.step / (maxSteps + 1)
+    }
   }
 }
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.page-progress {
+  position: absolute;
 }
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+.page-section-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+.section-enter-active {
+  animation: slideIn 1s;
+}
+.section-leave-active {
+  animation: slideOut 1s;
 }
 
-.links {
-  padding-top: 15px;
+@keyframes slideIn {
+  from {
+    transform: translateX(30vw);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-30vw);
+    opacity: 0;
+  }
 }
 </style>
