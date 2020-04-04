@@ -9,7 +9,7 @@ const io = require('socket.io')(http)
 /* eslint-enable */
 
 const mongoose = require('mongoose')
-const CardMutation = require('./CardMutation')
+const Card = require('./Card')
 
 require('dotenv').config()
 
@@ -26,10 +26,10 @@ mongoose.connect(uri, {
 io.on('connection', (socket) => {
   const sessionID = 'dev-session-id'
 
-  socket.emit('session:init', { id: sessionID })
+  socket.emit('session:init', { session: sessionID })
 
   // // Get the last 10 mutations from the database.
-  // CardMutation.find()
+  // Card.find()
   //   .sort({ createdAt: -1 })
   //   .limit(1000)
   //   .exec((err, mutations) => {
@@ -40,10 +40,14 @@ io.on('connection', (socket) => {
   //   })
 
   socket.on('card:init', (data) => {
-    console.log('---card init A')
-    CardMutation.find()
+    // const query = {
+    //   session: data.session
+    // }
+
+    Card.find()
+      .select({ session: 0, _id: 0, updatedAt: 0, createdAt: 0, __v: 0 })
       .sort({ createdAt: -1 })
-      .limit(1000)
+      .limit(100000)
       .exec((err, mutations) => {
         if (err) return console.error(err)
         console.log('---card init')
@@ -54,19 +58,44 @@ io.on('connection', (socket) => {
 
   // Listen to connected users for a new mutations.
   socket.on('card:mutation', (data) => {
-    console.log('card:mutation')
     // Create new mutation
-    const card = new CardMutation({
-      ...data
-    })
+    // const card = new Card({
+    //   ...data
+    // })
+    //
+    // // Save the card to the database.
+    // card.save((err) => {
+    //   if (err) return console.error(err)
+    // })
+    const { id, session, ...payload } = data
+    const query = {
+      uuid: id,
+      session
+    }
 
-    // Save the card to the database.
-    card.save((err) => {
-      if (err) return console.error(err)
+    const update = {
+      uuid: id,
+      session,
+      ...data
+    }
+
+    console.log('card:mutation', { query, update })
+
+    const options = { upsert: true, new: true, setDefaultsOnInsert: true }
+
+    // Find the document
+    Card.findOneAndUpdate(query, update, options, (error, result) => {
+      console.log('findOneAndUpdate', result)
+      if (error) {
+        console.log('error', error)
+        return
+      }
+      // do something with the document
+      console.log('findOneAndUpdate', result)
     })
 
     // Notify all other users about a new card.
-    socket.broadcast.emit('card:push', data)
+    socket.broadcast.emit('card:push', { id, ...payload })
   })
 })
 

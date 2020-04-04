@@ -11,14 +11,15 @@ const throttledPush = throttle((dispatch, payload) => {
 }, 400)
 
 export const actions = {
-  addCard({ commit, dispatch }) {
+  addCard({ commit, dispatch }, payload) {
     const id = uuidv4()
 
     const card = {
       id,
       x: 0,
       y: 0,
-      text: ''
+      text: '',
+      ...payload
     }
 
     commit('addCard', card)
