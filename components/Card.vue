@@ -1,11 +1,21 @@
 <template>
-  <Moveable v-bind="moveable" @drag="handleDrag" class="moveable Card">
+  <Moveable ref="moveable" v-bind="moveable" @drag="handleDrag" class="Card">
     <div class="Card--inner">
-      <button @click="$emit('delete')">Delete</button>
+      <button @click="$emit('delete')">
+        <icon icon="close" size="small" />
+      </button>
       <div>
         <label>
           Text:
-          <input ref="inputText" :value="value.text" @input="handleInput" />
+          <div v-if="!isEditing" @click="handleEditStart">
+            e: {{ value.text }}
+          </div>
+          <input
+            ref="inputText"
+            v-else
+            @keydown.enter="handleEditEnd"
+            :value="value.text"
+          />
         </label>
       </div>
       <details>
@@ -21,10 +31,12 @@
 <script>
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
+import Icon from '~/components/Icon'
 
 export default {
   components: {
-    Moveable
+    Moveable,
+    Icon
   },
   props: {
     value: {
@@ -33,28 +45,33 @@ export default {
     }
   },
   data: () => ({
-    initialPos: {
-      x: 0,
-      y: 0
-    },
+    isEditing: false,
     moveable: {
       draggable: true,
       throttleDrag: 0
     }
   }),
+  mounted() {
+    this.$refs.moveable.$el.style.transform = this.value.transform
+  },
   methods: {
-    handleInput() {
-      this.$store.dispatch('cards/updateContent', {
+    handleEditStart() {
+      this.isEditing = true
+    },
+    handleEditEnd() {
+      this.isEditing = false
+      this.$store.dispatch('cards/updateCardContent', {
         id: this.value.id,
         text: this.$refs.inputText.value
       })
     },
-    handleDrag({ target, top, left, transform }) {
+    handleDrag({ target, top: y, left: x, transform }) {
       target.style.transform = transform
       this.$store.dispatch('cards/updateCardPosition', {
         id: this.value.id,
-        x: top,
-        y: left
+        transform,
+        x,
+        y
       })
     }
   }
@@ -63,6 +80,7 @@ export default {
 
 <style lang="scss" scoped>
 $size: 250px;
+$button-size: 22px;
 
 * {
   box-sizing: border-box;
@@ -84,5 +102,27 @@ input {
   width: auto;
   margin: 20px;
   display: block;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 5px;
+  width: $button-size;
+  height: $button-size;
+}
+.icon,
+.icon > img {
+  display: inline-block;
+}
+</style>
+
+<style>
+.moveable-control-box {
+  display: none !important;
 }
 </style>
