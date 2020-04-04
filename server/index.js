@@ -54,17 +54,18 @@ io.on('connection', (socket) => {
 
   // Listen to connected users for a new mutations.
   socket.on('card:mutation', (data) => {
+    console.log('card:mutation')
     // Create new mutation
-    const message = new CardMutation({
+    const card = new CardMutation({
       ...data
     })
 
-    // Save the message to the database.
-    message.save((err) => {
+    // Save the card to the database.
+    card.save((err) => {
       if (err) return console.error(err)
     })
 
-    // Notify all other users about a new message.
+    // Notify all other users about a new card.
     socket.broadcast.emit('card:push', data)
   })
 })

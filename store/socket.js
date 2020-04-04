@@ -1,4 +1,4 @@
-import debounce from 'lodash.debounce'
+// import debounce from 'lodash.debounce'
 import io from 'socket.io-client'
 
 // const socket = io.connect('http://localhost:3000')
@@ -6,10 +6,11 @@ import io from 'socket.io-client'
 // const socket = io('https://signers-koffer.herokuapp.com')
 const socket = io('http://localhost:5000')
 let sessionID = null
+console.log(sessionID)
 
-const debouncedEmit = debounce((socket, state) => {
-  socket.emit('update', JSON.stringify(state))
-}, 1000)
+// const debouncedEmit = debounce((socket, state) => {
+//   socket.emit('update', JSON.stringify(state))
+// }, 1000)
 
 socket.on('session:init', (data) => {
   console.log('---socket--- session init', data)
@@ -52,12 +53,12 @@ export const state = () => ({
 })
 
 export const actions = {
-  emit({ state }, payload) {
-    console.log('---- card emit from action')
-    debouncedEmit(socket, payload)
-  },
+  // emit({ state }, payload) {
+  //   console.log('---- card emit from action')
+  //   debouncedEmit(socket, payload)
+  // }
 
-  card({ state }, data) {
+  emit({ state }, data) {
     console.log('---- card mutation from action')
     socket.emit('card:mutation', {
       session: sessionID,
@@ -70,4 +71,4 @@ export const actions = {
   // }
 }
 
-export default { sessionID }
+// export default { sessionID }

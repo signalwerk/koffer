@@ -1,8 +1,13 @@
+import { throttle } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
 export const state = () => ({
   cards: {}
 })
+
+const throttledPush = throttle((dispatch, payload) => {
+  dispatch('push', payload)
+}, 400)
 
 export const actions = {
   addCard({ commit, dispatch }) {
@@ -15,12 +20,8 @@ export const actions = {
       text: ''
     }
 
-    dispatch('socket/card', {
-      ...card
-    })
-
     commit('addCard', card)
-    dispatch('push')
+    dispatch('push', { mutation: 'addCard', ...card })
   },
 
   updateCard({ commit, dispatch }, payload) {
@@ -34,7 +35,10 @@ export const actions = {
   },
   updateCardPosition({ commit, dispatch }, payload) {
     commit('updateCardPosition', payload)
-    dispatch('push')
+
+    console.log('--- updateCardPosition')
+    throttledPush(dispatch, { mutation: 'updateCardPosition', ...payload })
+    // dispatch('push', { mutation: 'updateCardPosition', ...payload })
   },
 
   deleteCard({ commit, dispatch }, index) {
@@ -42,14 +46,8 @@ export const actions = {
     dispatch('push')
   },
 
-  push({ state, dispatch }) {
-    dispatch(
-      'socket/emit',
-      {
-        cards: state
-      },
-      { root: true }
-    )
+  push({ state, dispatch }, payload) {
+    dispatch('socket/emit', payload, { root: true })
   }
 }
 
