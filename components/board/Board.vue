@@ -44,7 +44,6 @@ export default {
     addShape() {
       this.$store.dispatch('shapes/add')
     },
-
     updateCardContent(id, text) {
       this.$store.dispatch('cards/updateCardContent', { id, text })
     },

@@ -1,9 +1,8 @@
 <template>
   <Moveable
-    ref="moveable"
-    v-bind="moveable"
+    ref="moveable-shape"
+    v-bind="moveableShape"
     @drag="handleDrag"
-    :class="[isEditing ? 'is-editing' : '']"
     class="Shape"
   >
     Hello Shapies
@@ -16,13 +15,25 @@ export default {
   components: {
     Moveable
   },
+  props: {
+    value: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data: () => ({
-    type: 'Triangle',
-    moveable: {
+    moveableShape: {
       draggable: true,
       throttleDrag: 0
     }
-  })
+  }),
+  methods: {
+    handleDrag({ target, top: y, left: x, transform }) {
+      const { id } = this.value
+      target.style.transform = transform
+      this.$store.dispatch('shapes/updatePosition', { id, transform, x, y })
+    }
+  }
 }
 </script>
 
