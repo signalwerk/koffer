@@ -1,6 +1,6 @@
 <template>
-  <Moveable v-bind="moveable" @drag="handleDrag" class="moveable">
-    <div class="Card">
+  <Moveable v-bind="moveable" @drag="handleDrag" class="moveable Card">
+    <div class="Card--inner">
       <button @click="$emit('delete')">Delete</button>
       <div>
         <label>
@@ -62,25 +62,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$size: 250px;
+
 * {
   box-sizing: border-box;
 }
-$size: 250px;
 
 .Card {
+  position: absolute;
   width: $size;
   height: $size;
-  background-color: palegoldenrod;
-  margin: 20px;
+  padding: 20px;
+
+  &--inner {
+    height: 100%;
+    background-color: #fefac7;
+  }
 }
 
 input {
   width: auto;
   margin: 20px;
   display: block;
-}
-
-.moveable {
-  display: inline-block;
 }
 </style>

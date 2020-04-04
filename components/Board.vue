@@ -1,15 +1,17 @@
 <template>
-  <div>
-    <div v-for="(card, id) in cards">
-      <card
-        :value="card"
-        @drag="(card) => updateCardPosition(id, card)"
-        @input="(card) => updateCardContent(id, card)"
-        @delete="deleteCard(id)"
-        :key="id"
-      />
+  <div class="Board">
+    <div class="CardList">
+      <div v-for="(card, id) in cards" class="CardList-item">
+        <card
+          :value="card"
+          @drag="(card) => updateCardPosition(id, card)"
+          @input="(card) => updateCardContent(id, card)"
+          @delete="deleteCard(id)"
+          :key="id"
+        />
+      </div>
     </div>
-    <button @click="addCard">Add new card</button>
+    <button @click="addCard" class="Button--addCard">Add new card</button>
   </div>
 </template>
 
@@ -51,3 +53,26 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+* {
+  box-sizing: border-box;
+}
+.Board {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f8f8fc;
+}
+.CardList {
+  position: relative;
+  transform: translate(50vw, 50vh);
+  // outline: 1px dashed red;
+}
+.Button--addCard {
+  position: absolute;
+  font-size: 21px;
+  left: 0;
+  top: 0;
+}
+</style>
