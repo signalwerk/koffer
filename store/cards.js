@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 export const state = () => ({
   cards: {}
 })
@@ -40,7 +42,7 @@ export const mutations = {
    * @param state
    */
   addCard(state) {
-    const id = Math.floor(Math.random() * 10000)
+    const id = uuidv4()
     state.cards = {
       ...state.cards,
       [id]: {

@@ -3,7 +3,12 @@
     <div class="Card">
       <button @click="$emit('delete')">Delete</button>
       <div>
-        <div>{{ value.id }}@({{ value.x }}/{{ value.y }})</div>
+        <details>
+          <summary>info</summary>
+          <code>
+            <pre>{{ JSON.stringify(value, null, 2) }}</pre>
+          </code>
+        </details>
         <label>
           Text: <input ref="text" :value="value.text" @input="handleInput" />
         </label>
