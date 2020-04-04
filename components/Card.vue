@@ -50,19 +50,14 @@ export default {
       })
     },
     handleDrag({ target, left, top }) {
-      // const {x, y} = this.$store.state.cards
-      console.log(this.$store.state.cards[this.value.id])
+      const { x, y } = this.$store.state.cards[this.value.id]
+      target.style.transform = `translate3d(${x}px, ${y}px, 0)`
+
       this.$store.dispatch('updateCardPosition', {
         id: this.value.id,
         x: left,
         y: top
       })
-
-      // target.style.transform = `translate3d(${left}px, ${top}px, 0)`
-      // this.$emit('drag', {
-      //   x: left,
-      //   y: top
-      // })
     }
   }
 }

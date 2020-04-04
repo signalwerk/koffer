@@ -42,11 +42,14 @@ export const mutations = {
    */
   addCard(state) {
     const id = Math.floor(Math.random() * 10000)
-    state.cards[id] = {
-      id,
-      x: 0,
-      y: 0,
-      text: ''
+    state.cards = {
+      ...state.cards,
+      [id]: {
+        id,
+        x: 0,
+        y: 0,
+        text: ''
+      }
     }
   },
 
