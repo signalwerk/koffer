@@ -10,7 +10,7 @@
         <p class="h2 lead">
           👋 Start right now, but first of all: What's your name?
         </p>
-        <input placeholder="Name" v-model="userName" />
+        <input v-model="userName" placeholder="Name" />
         <button @click="step++" class="button button--primary">Submit</button>
       </page-section>
     </transition>
@@ -23,7 +23,7 @@
         <p class="h2 lead">
           ✍️ Let the participants know what they are working on.
         </p>
-        <input placeholder="" v-model="sessionName" />
+        <input v-model="sessionName" placeholder="" />
         <button @click="persistSettings" class="button button--primary">
           Almost complete
         </button>

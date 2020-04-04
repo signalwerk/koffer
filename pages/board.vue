@@ -63,7 +63,7 @@ export default {
         { item: 'artboard', handler: () => {} },
         { item: 'sticky-note', handler: this.addSticky },
         { item: 'text', handler: () => {} },
-        { item: 'shape', handler: () => {} },
+        { item: 'shape', handler: this.addShape },
         { item: 'draw', handler: () => {} },
         { item: 'eraser', handler: () => {} },
         { item: 'stopwatch', handler: this.toggleStopwatch }
@@ -76,6 +76,9 @@ export default {
   },
 
   methods: {
+    addShape() {
+      this.$refs.board.addShape()
+    },
     addSticky() {
       this.$refs.board.addCard()
     },
