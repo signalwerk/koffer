@@ -24,23 +24,39 @@ mongoose.connect(uri, {
 // app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
 
 io.on('connection', (socket) => {
-  // Get the last 10 mutations from the database.
-  CardMutation.find()
-    .sort({ createdAt: -1 })
-    .limit(10)
-    .exec((err, mutations) => {
-      if (err) return console.error(err)
+  const sessionID = 'dev-session-id'
 
-      // Send the last mutations to the user.
-      socket.emit('card:init', mutations)
-    })
+  socket.emit('session:init', { id: sessionID })
+
+  // // Get the last 10 mutations from the database.
+  // CardMutation.find()
+  //   .sort({ createdAt: -1 })
+  //   .limit(1000)
+  //   .exec((err, mutations) => {
+  //     if (err) return console.error(err)
+  //
+  //     // Send the last mutations to the user.
+  //     socket.emit('card:init', mutations)
+  //   })
+
+  socket.on('card:init', (data) => {
+    console.log('---card init A')
+    CardMutation.find()
+      .sort({ createdAt: -1 })
+      .limit(1000)
+      .exec((err, mutations) => {
+        if (err) return console.error(err)
+        console.log('---card init')
+        // Send the last mutations to the user.
+        socket.emit('card:restore', mutations)
+      })
+  })
 
   // Listen to connected users for a new mutations.
-  socket.on('card:mutation', (mutation, payload) => {
+  socket.on('card:mutation', (data) => {
     // Create new mutation
     const message = new CardMutation({
-      ...payload,
-      mutation
+      ...data
     })
 
     // Save the message to the database.
@@ -49,10 +65,7 @@ io.on('connection', (socket) => {
     })
 
     // Notify all other users about a new message.
-    socket.broadcast.emit('card:push', {
-      ...payload,
-      mutation
-    })
+    socket.broadcast.emit('card:push', data)
   })
 })
 
