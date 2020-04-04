@@ -25,15 +25,15 @@ export default {
 
   methods: {
     addCard() {
-      this.$store.commit('addCard')
+      this.$store.dispatch('addCard')
     },
 
     deleteCard(index) {
-      this.$store.commit('deleteCard', index)
+      this.$store.dispatch('deleteCard', index)
     },
 
     updateCard(index, card) {
-      this.$store.commit('updateCard', {
+      this.$store.dispatch('updateCard', {
         index,
         card
       })
