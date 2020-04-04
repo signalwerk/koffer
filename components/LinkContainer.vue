@@ -1,6 +1,6 @@
 <template>
   <div class="link-container">
-    <i class="material-icons icon--link">link</i>
+    <icon :is-active="true" icon="link" size="medium" />
     <p>
       {{ link }}
     </p>
@@ -11,7 +11,11 @@
 </template>
 
 <script>
+import Icon from '~/components/Icon'
+
 export default {
+  components: { Icon },
+
   props: {
     link: {
       type: String,
@@ -23,6 +27,9 @@ export default {
     async copyLink() {
       try {
         await this.$copyText(this.link)
+        this.$toast.success('Copied', {
+          duration: 3000
+        })
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e)

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/toast": "^3.3.0",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^2.0.0",
     "nuxt-clipboard2": "^0.2.1",

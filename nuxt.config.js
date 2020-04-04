@@ -56,7 +56,8 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     'nuxt-material-design-icons',
-    'nuxt-clipboard2'
+    'nuxt-clipboard2',
+    '@nuxtjs/toast'
   ],
   /*
    ** Axios module configuration
