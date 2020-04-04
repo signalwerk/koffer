@@ -64,8 +64,8 @@ export const mutations = {
   },
 
   updateCardPosition(state, { id, x, y }) {
-    state.cards[id].x += x
-    state.cards[id].y += y
+    state.cards[id].x = x
+    state.cards[id].y = y
   },
 
   /**
