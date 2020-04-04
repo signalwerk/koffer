@@ -1,13 +1,19 @@
 <template>
-  <Moveable v-bind="moveable" @drag="handleDrag" class="moveable">
-    <div class="Card">
+  <Moveable v-bind="moveable" @drag="handleDrag" class="moveable Card">
+    <div class="Card--inner">
       <button @click="$emit('delete')">Delete</button>
       <div>
-        <div>{{ value.id }}@({{ value.x }}/{{ value.y }})</div>
         <label>
-          Text: <input ref="text" :value="value.text" @input="handleInput" />
+          Text:
+          <input ref="inputText" :value="value.text" @input="handleInput" />
         </label>
       </div>
+      <details>
+        <summary>info</summary>
+        <code>
+          <pre>{{ JSON.stringify(value, null, 2) }}</pre>
+        </code>
+      </details>
     </div>
   </Moveable>
 </template>
@@ -38,8 +44,9 @@ export default {
   }),
   methods: {
     handleInput() {
-      this.$emit('input', {
-        text: this.$refs.text.value
+      this.$store.dispatch('cards/updateContent', {
+        id: this.value.id,
+        text: this.$refs.inputText.value
       })
     },
     handleDrag({ target, top, left, transform }) {
@@ -55,10 +62,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$size: 250px;
+
+* {
+  box-sizing: border-box;
+}
+
 .Card {
-  $size: 250px;
+  position: absolute;
   width: $size;
   height: $size;
-  background-color: palegoldenrod;
+  padding: 20px;
+
+  &--inner {
+    height: 100%;
+    background-color: #fefac7;
+  }
+}
+
+input {
+  width: auto;
+  margin: 20px;
+  display: block;
 }
 </style>

@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 export const state = () => ({
   cards: {}
 })
@@ -13,6 +15,10 @@ export const actions = {
     dispatch('push')
   },
 
+  updateCardContent({ commit, dispatch }, payload) {
+    commit('updateCardContent', payload)
+    dispatch('push')
+  },
   updateCardPosition({ commit, dispatch }, payload) {
     commit('updateCardPosition', payload)
     dispatch('push')
@@ -40,7 +46,7 @@ export const mutations = {
    * @param state
    */
   addCard(state) {
-    const id = Math.floor(Math.random() * 10000)
+    const id = uuidv4()
     state.cards = {
       ...state.cards,
       [id]: {
@@ -58,8 +64,8 @@ export const mutations = {
    * @param index
    * @param card
    */
-  updateCard(state, { id, card }) {
-    state.cards[id] = card
+  updateCardContent(state, { id, text }) {
+    state.cards[id].text = text
   },
 
   updateCardPosition(state, { id, x, y }) {

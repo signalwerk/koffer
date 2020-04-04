@@ -1,0 +1,28 @@
+input {
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  color: #000000;
+
+  background: #FFFFFF;
+  border: 2px solid rgba(57, 133, 247, 0.72);
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  width: 350px;
+  height: 48px;
+  padding: 12px;
+  outline: none;
+
+  margin-top: 0;
+  margin-bottom: 20px;
+
+  &::placeholder {
+    color: #9a9a9a;
+  }
+
+  &:focus {
+    border: 3px solid $brandColor;
+  }
+}
