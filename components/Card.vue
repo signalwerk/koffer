@@ -1,41 +1,71 @@
 <template>
-  <div>
-    <button @click="$emit('delete')">Delete</button>
-    <div>
-      X:
-      <input ref="x" :value="value.x" @input="handleInput" type="number" />
+  <Moveable v-bind="moveable" @drag="handleDrag" class="moveable">
+    <div class="Card">
+      <button @click="$emit('delete')">Delete</button>
+      <div>
+        <span>@({{ value.x }}/{{ value.y }})</span>
+        <label>
+          Text: <input ref="text" :value="value.text" @input="handleInput" />
+        </label>
+      </div>
     </div>
-    <div>
-      Y:
-      <input ref="y" :value="value.y" @input="handleInput" type="number" />
-    </div>
-    <div>
-      Text: <input ref="text" :value="value.text" @input="handleInput" />
-    </div>
-  </div>
+  </Moveable>
 </template>
 
 <script>
+// https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
+import Moveable from 'vue-moveable'
+
 export default {
+  components: {
+    Moveable
+  },
   props: {
     value: {
       type: Object,
       default: () => ({
-        x: 0,
-        y: 0,
+        x: this.$store.card.x,
+        y: this.$store.card.y,
         text: ''
       })
     }
   },
-
+  data: () => ({
+    moveable: {
+      draggable: true,
+      throttleDrag: 0,
+      resizable: false,
+      throttleResize: 1,
+      keepRatio: true,
+      scalable: false,
+      throttleScale: 0,
+      rotatable: false,
+      throttleRotate: 0
+    }
+  }),
   methods: {
     handleInput() {
       this.$emit('input', {
-        x: parseInt(this.$refs.x.value),
-        y: parseInt(this.$refs.y.value),
         text: this.$refs.text.value
+      })
+    },
+    handleDrag({ target, left, top }) {
+      target.style.transform = `translate3d(${left}px, ${top}px, 0)`
+      this.$store.commit({
+        type: 'card/drag',
+        x: left,
+        y: top
       })
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.Card {
+  $size: 250px;
+  width: $size;
+  height: $size;
+  background-color: palegoldenrod;
+}
+</style>
