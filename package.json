@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
+    "dev-local-socket": "NODE_ENV=develop nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",

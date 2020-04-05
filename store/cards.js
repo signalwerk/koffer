@@ -48,12 +48,12 @@ export const mutations = {
   },
 
   nosync_restore(state, cards) {
-    console.log('nosync_restore', cards)
+    // console.log('nosync_restore', cards)
     state.cards = cards
   },
 
   nosync_updateCard(state, card) {
-    console.log('nosync_updateCard', card)
+    // console.log('nosync_updateCard', card)
 
     if (card.deleted) {
       Vue.delete(state.cards, card.uuid)
@@ -88,9 +88,6 @@ export const mutations = {
    */
   deleteCard(state, { uuid, deleted }) {
     // const { [uuid]: removedCard, ...newCards } = state.cards
-    // state.cards = newCards
-    // Vue.delete(state.cards, uuid)
-    // delete state.cards[uuid]
     state.cards[uuid].deleted = deleted
     Vue.delete(state.cards, uuid)
   }

@@ -7,7 +7,14 @@ const routerBase =
       }
     : {}
 
+const isDevelop = () => (process.env.NODE_ENV || '').toLowerCase() === 'develop'
+
 export default {
+  env: {
+    SOCKETIO_URL: isDevelop()
+      ? 'http://localhost:5000'
+      : 'https://signers-koffer.herokuapp.com'
+  },
   mode: 'spa',
   config: {
     devtools: false

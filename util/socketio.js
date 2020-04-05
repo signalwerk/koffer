@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 import { throttle } from 'lodash'
 
 // // const socket = io('https://signers-koffer.herokuapp.com')
-const socket = io('http://localhost:5000')
+const socket = io(process.env.SOCKETIO_URL)
 
 const throttledEmit = throttle((event, payload) => {
   socket.emit(event, payload)
