@@ -1,5 +1,5 @@
 <template>
-  <div @clickaway="handleEditEnd">
+  <div v-on-clickaway="handleEditEnd">
     <Moveable
       v-bind="moveable"
       @drag="handleDrag"
@@ -45,6 +45,7 @@
 <script>
 // https://www.npmjs.com/package/vue-clickaway
 import { mixin as clickaway } from 'vue-clickaway'
+
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
 import ColorPicker from '~/components/board/ColorPicker.vue'
@@ -90,7 +91,8 @@ export default {
       this.isEditing = false
       const { uuid } = this.value
       const { value: text } = this.$refs.inputText
-      this.$store.dispatch('cards/updateCardContent', { uuid, text })
+      const { color } = this.value
+      this.$store.dispatch('cards/updateCardContent', { uuid, text, color })
     },
 
     deleteCard(id) {
