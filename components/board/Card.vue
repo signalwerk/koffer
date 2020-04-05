@@ -4,7 +4,7 @@
     @drag="handleDrag"
     :class="[isEditing ? 'is-editing' : '']"
     :style="transform"
-    class="Card"
+    class="Card pink"
   >
     <div class="Card--inner">
       <button @click="deleteCard">
@@ -105,6 +105,15 @@ export default {
 <style lang="scss" scoped>
 $size: 250px;
 $button-size: 22px;
+$colors: (
+  '.blue' #7dc8e9,
+  '.orange' #f5b57a,
+  '.green' #d3e187,
+  '.pink' #e7909a,
+  '.umbra' #efd351,
+  '.lavender' #e5acc8,
+  '.yellow' #fcf4a9
+);
 
 * {
   box-sizing: border-box;
@@ -123,6 +132,11 @@ $button-size: 22px;
     padding: 20px;
     height: 100%;
     background-color: #fefac7;
+  }
+  @each $class, $color in $colors {
+    &#{$class} &--inner {
+      background-color: $color;
+    }
   }
   &--Text {
     text-align: center;
