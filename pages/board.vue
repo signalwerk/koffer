@@ -37,7 +37,7 @@
     </transition>
 
     <transition name="fade-fast">
-      <div class="context" v-show="hasContextMenu">
+      <div v-show="hasContextMenu" class="context">
         <color-picker v-model="color" />
       </div>
     </transition>

@@ -131,7 +131,7 @@ $colors: (
     flex-direction: column;
     padding: 20px;
     height: 100%;
-    background-color: #fefac7;
+    background-color: #fcf4a9;
   }
   @each $class, $color in $colors {
     &#{$class} &--inner {
