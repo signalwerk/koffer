@@ -3,8 +3,8 @@
     <header class="header">
       <div class="bold">
         {{
-          sessions[this.$router.currentRoute.params.id] &&
-            sessions[this.$router.currentRoute.params.id].name
+          sessions[this.$router.currentRoute.query.id] &&
+            sessions[this.$router.currentRoute.query.id].name
         }}
       </div>
       <div>
@@ -69,7 +69,8 @@ export default {
   },
 
   created() {
-    const id = this.$router.currentRoute.params.id
+    console.log('router', this.$router.currentRoute)
+    const id = this.$router.currentRoute.query.id
     socket.emit('session:join', id)
     console.log('joindedboard: ', id)
   },

@@ -48,7 +48,7 @@
           </p>
           <link-container
             :link="
-              `https://signers-koffer.github.io/koffer/board/${uuid}/${admin}`
+              `https://signers-koffer.github.io/koffer/board/?id=${uuid}&admin=${admin}`
             "
           />
         </div>
@@ -56,13 +56,13 @@
         <div>
           <h2 class="h5 bold">Send link to invite participants</h2>
           <link-container
-            :link="`https://signers-koffer.github.io/koffer/board/${uuid}`"
+            :link="`https://signers-koffer.github.io/koffer/board/?id=${uuid}`"
           />
         </div>
 
         <div>
           <nuxt-link
-            :to="`/board/${uuid}`"
+            :to="`/board/?id=${uuid}`"
             tag="button"
             class="button button--primary done-button"
           >
