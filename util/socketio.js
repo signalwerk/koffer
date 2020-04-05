@@ -12,6 +12,21 @@ const throttledEmit = throttle((event, payload) => {
   socket.emit(event, payload)
 }, 100)
 
+const generalRestore = ({ name, actions, data, store }) => {
+  if (actions && actions[name] && actions[name].restore) {
+    const newStore = {}
+    data.forEach((item) => {
+      newStore[item.uuid] = item
+    })
+    store.commit(actions[name].restore, newStore)
+  }
+}
+const generalPush = ({ name, actions, data, store }) => {
+  if (actions && actions[name] && actions[name].update) {
+    store.commit(actions[name].update, data)
+  }
+}
+
 export default function liveSyncPlugin(conf) {
   // eslint-disable-next-line
   // let sessionID = null
@@ -20,25 +35,27 @@ export default function liveSyncPlugin(conf) {
 
   return (store) => {
     // called when the store is initialized
-    socket.on('session:init', (data) => {
+    socket.on('session:boot', (data) => {
       // sessionID = data.session
       socket.emit('cards:init')
+      socket.emit('sessions:init')
     })
 
     socket.on('cards:restore', (data) => {
-      if (actions && actions.cards && actions.cards.restore) {
-        const newStore = {}
-        data.forEach((item) => {
-          newStore[item.uuid] = item
-        })
-        store.commit(actions.cards.restore, newStore)
-      }
+      generalRestore({ name: 'cards', actions, data, store })
+    })
+
+    socket.on('sessions:restore', (data) => {
+      console.log('got sessions:restore', data)
+      generalRestore({ name: 'sessions', actions, data, store })
     })
 
     socket.on('cards:push', (data) => {
-      if (actions && actions.cards && actions.cards.update) {
-        store.commit(actions.cards.update, data)
-      }
+      generalPush({ name: 'cards', actions, data, store })
+    })
+
+    socket.on('sessions:push', (data) => {
+      generalPush({ name: 'sessions', actions, data, store })
     })
 
     // The mutation comes in the format of `{ type, payload }`.
@@ -50,7 +67,7 @@ export default function liveSyncPlugin(conf) {
       if (modules.includes(module)) {
         // do we have to sync this mutation?
         if (!mutation.startsWith('nosync_')) {
-          console.log('--- mutation card', _mutation.payload)
+          console.log(`--- mutation ${module}`, _mutation.payload)
           throttledEmit(`${module}:mutation`, {
             // session: sessionID,
             ..._mutation.payload

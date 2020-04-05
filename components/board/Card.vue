@@ -26,7 +26,7 @@
           />
         </div>
       </div>
-      <details v-if="true">
+      <details v-if="false">
         <summary>debug info</summary>
         <code>
           <pre>{{ JSON.stringify(value, null, 2) }}</pre>
