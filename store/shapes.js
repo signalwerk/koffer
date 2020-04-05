@@ -8,22 +8,19 @@ export const state = () => ({
 })
 
 export const actions = {
-  add({ commit, dispatch }, payload) {
+  addShape({ commit, dispatch }, payload) {
     const uuid = uuidv4()
 
     const shape = {
       uuid,
+      deleted: false,
       x: 0,
       y: 0,
       shape: 'circle',
       ...payload
     }
 
-    commit('add', shape)
-  },
-
-  update({ commit, dispatch }, payload) {
-    commit('update', payload)
+    commit('addShape', shape)
   },
 
   updateShape({ commit, dispatch }, payload) {
@@ -55,7 +52,7 @@ export const mutations = {
     }
   },
 
-  add(state, shape) {
+  addShape(state, shape) {
     Vue.set(state.shapes, shape.uuid, shape)
   },
 

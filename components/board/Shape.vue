@@ -88,7 +88,7 @@ export default {
     handleDrag({ target, top: y, left: x, transform }) {
       const { uuid } = this.value
       target.style.transform = transform
-      this.$store.dispatch('shapes/updatePosition', { uuid, transform, x, y })
+      this.$store.dispatch('shapes/updatePosition', { uuid, x, y })
     },
     deleteShape(id) {
       this.$store.dispatch('shapes/delete', {
