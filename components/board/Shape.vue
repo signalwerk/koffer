@@ -19,7 +19,7 @@
     <transition name="fade-fast">
       <div class="Context-menu">
         <div v-show="isEditing" class="context Context-menuInner">
-          <shape-picker @input="handleUpdateShape" />
+          <shape-picker :value="shapeIndex" @input="handleUpdateShape" />
         </div>
       </div>
     </transition>
@@ -64,6 +64,9 @@ export default {
   methods: {
     handleUpdateShape(shapeIndex) {
       this.$data.shapeIndex = shapeIndex
+      const { uuid } = this.value
+      const shape = this.currentShape
+      this.$store.dispatch('shapes/updateShape', { uuid, shape })
     },
     handleEditStart() {
       this.$data.isEditing = true
