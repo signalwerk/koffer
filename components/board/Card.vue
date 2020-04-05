@@ -81,7 +81,6 @@ export default {
       const x = this.isDraging ? this.x : this.value.x
       const y = this.isDraging ? this.y : this.value.y
 
-      console.log('transform', { x, y })
       return {
         transform: `translate(${x}px, ${y}px)`
       }
