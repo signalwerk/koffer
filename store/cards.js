@@ -87,15 +87,13 @@ export const mutations = {
    * @param card
    */
   updateCardContent(state, card) {
-    const { uuid, text, color } = card
+    const { uuid, text } = card
     state.cards[uuid].text = text
-    state.cards[uuid].color = color
   },
 
-  updateCardPosition(state, { uuid, x, y, transform }) {
+  updateCardPosition(state, { uuid, x, y }) {
     state.cards[uuid].x = x
     state.cards[uuid].y = y
-    state.cards[uuid].transform = transform
   },
 
   updateCardColor(state, { uuid, color }) {
