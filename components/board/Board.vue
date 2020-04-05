@@ -77,7 +77,8 @@ export default {
   background-color: #f8f8fc;
 }
 .ShapeList,
-.CardList {
+.CardList,
+.TextareaList {
   position: relative;
   transform: translate(50vw, 50vh);
   // outline: 1px dashed red;
