@@ -10,7 +10,11 @@
         <p class="h2 lead">
           👋 Start right now, but first of all: What's your name?
         </p>
-        <input v-model="userName" placeholder="Name" />
+        <input
+          v-model="name"
+          @change="(e) => updateName(e.target.value)"
+          placeholder="NAME"
+        />
         <button @click="step++" class="button button--primary">Submit</button>
       </page-section>
     </transition>
@@ -69,9 +73,12 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import ProgressBar from '~/components/ProgressBar.vue'
 import PageSection from '~/components/PageSection.vue'
 import LinkContainer from '~/components/LinkContainer.vue'
+
+const { mapState, mapActions } = createNamespacedHelpers('me')
 
 export default {
   components: { ProgressBar, PageSection, LinkContainer },
@@ -90,6 +97,8 @@ export default {
   },
 
   computed: {
+    ...mapState(['uuid', 'name']),
+
     progress() {
       const maxSteps = 3
 
@@ -98,6 +107,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(['updateName']),
     persistSettings() {
       this.$store.dispatch('session/setSettings', {
         userName: this.userName,
