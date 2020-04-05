@@ -34,18 +34,29 @@ export const actions = {
     commit('updatePosition', payload)
   },
 
-  delete({ commit, dispatch }, index) {
-    commit('delete', index)
+  delete({ commit, dispatch }, payload) {
+    commit('delete', payload)
   }
 }
 
 export const mutations = {
-  add(state, shape) {
-    Vue.set(state.shapes, shape.uuid, shape)
-  },
-
   nosync_restore(state, cards) {
     state.cards = cards
+  },
+
+  nosync_updateShape(state, shape) {
+    if (shape.deleted) {
+      Vue.delete(state.shapes, shape.uuid)
+    } else {
+      Vue.set(state.shapes, shape.uuid, {
+        ...state.shapes[shape.uuid],
+        ...shape
+      })
+    }
+  },
+
+  add(state, shape) {
+    Vue.set(state.shapes, shape.uuid, shape)
   },
 
   updateShape(state, { uuid, shape }) {
@@ -55,10 +66,10 @@ export const mutations = {
   updatePosition(state, { uuid, x, y, transform }) {
     state.shapes[uuid].x = x
     state.shapes[uuid].y = y
-    state.shapes[uuid].transform = transform
   },
 
-  delete(state, uuid) {
+  delete(state, { uuid, deleted }) {
+    state.shapes[uuid].deleted = deleted
     Vue.delete(state.shapes, uuid)
   }
 }
