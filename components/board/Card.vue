@@ -1,49 +1,63 @@
 <template>
-  <Moveable
-    v-bind="moveable"
-    @drag="handleDrag"
-    :class="[isEditing ? 'is-editing' : '']"
-    :style="transform"
-    class="Card pink"
-  >
-    <div class="Card--inner">
-      <button @click="deleteCard">
-        <icon icon="close" size="small" />
-      </button>
-      <div v-if="!isEditing" @click="handleEditStart" class="Card--Text">
-        <div class="Card--TextInner">
-          {{ value.text }}
+  <div v-on-clickaway="handleEditEnd">
+    <Moveable
+      v-bind="moveable"
+      @drag="handleDrag"
+      :class="[isEditing ? 'is-editing' : '']"
+      :style="transform"
+      class="Card pink"
+    >
+      <div class="Card--inner">
+        <button @click="deleteCard">
+          <icon icon="close" size="small" />
+        </button>
+        <div v-if="!isEditing" @click="handleEditStart" class="Card--Text">
+          <div class="Card--TextInner">
+            {{ value.text }}
+          </div>
+        </div>
+        <div v-else class="Card--Input">
+          <input
+            ref="inputText"
+            @click="handleInputClick"
+            @keydown.enter="handleEditEnd"
+            :value="value.text"
+          />
         </div>
       </div>
-      <div v-else class="Card--Input">
-        <input
-          ref="inputText"
-          @click="handleInputClick"
-          @keydown.enter="handleEditEnd"
-          @blur="handleEditEnd"
-          :value="value.text"
-        />
+      <details v-if="false">
+        <summary>debug info</summary>
+        <code>
+          <pre>{{ JSON.stringify(value, null, 2) }}</pre>
+        </code>
+      </details>
+    </Moveable>
+    <transition name="fade-fast">
+      <div class="Context-menu">
+        <div v-show="isEditing" class="context Context-menuInner">
+          <color-picker :value="value.color" />
+        </div>
       </div>
-    </div>
-    <details v-if="false">
-      <summary>debug info</summary>
-      <code>
-        <pre>{{ JSON.stringify(value, null, 2) }}</pre>
-      </code>
-    </details>
-  </Moveable>
+    </transition>
+  </div>
 </template>
 
 <script>
+// https://www.npmjs.com/package/vue-clickaway
+import { mixin as clickaway } from 'vue-clickaway'
+
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
+import ColorPicker from '~/components/board/ColorPicker.vue'
 import Icon from '~/components/Icon'
 
 export default {
   components: {
     Moveable,
+    ColorPicker,
     Icon
   },
+  mixins: [clickaway],
   props: {
     value: {
       type: Object,
@@ -68,6 +82,7 @@ export default {
     handleEditStart() {
       this.isEditing = true
       this.$nextTick(() => {
+        this.$emit('contextOpen')
         this.$refs.inputText.focus()
       })
     },
@@ -76,7 +91,8 @@ export default {
       this.isEditing = false
       const { uuid } = this.value
       const { value: text } = this.$refs.inputText
-      this.$store.dispatch('cards/updateCardContent', { uuid, text })
+      const { color } = this.value
+      this.$store.dispatch('cards/updateCardContent', { uuid, text, color })
     },
 
     deleteCard(id) {
@@ -177,6 +193,15 @@ button {
 .icon,
 .icon > img {
   display: inline-block;
+}
+
+.Context-menu {
+  transform: translate(-50vw, -50vh);
+}
+.Context-menuInner {
+  left: 50%;
+  top: 24px;
+  transform: translateX(-50%);
 }
 </style>
 

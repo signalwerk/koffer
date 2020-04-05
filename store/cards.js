@@ -40,12 +40,12 @@ export const actions = {
     commit('updateCardContent', payload)
   },
 
-  updateCardPosition({ commit, dispatch }, payload) {
-    commit('updateCardPosition', payload)
-  },
-
   updateCardColor({ commit, dispatch }, payload) {
     commit('updateCardColor', payload)
+  },
+
+  updateCardPosition({ commit, dispatch }, payload) {
+    commit('updateCardPosition', payload)
   },
 
   deleteCard({ commit, dispatch }, payload) {
@@ -86,8 +86,10 @@ export const mutations = {
    * @param index
    * @param card
    */
-  updateCardContent(state, { uuid, text }) {
+  updateCardContent(state, card) {
+    const { uuid, text, color } = card
     state.cards[uuid].text = text
+    state.cards[uuid].color = color
   },
 
   updateCardPosition(state, { uuid, x, y, transform }) {

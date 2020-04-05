@@ -2,7 +2,7 @@
   <div class="Board">
     <div class="CardList">
       <div v-for="(card, id) in cards" :key="id" class="CardList-item">
-        <card :value="card" />
+        <card :value="card" @contextOpen="$emit('contextOpen')" />
       </div>
     </div>
     <div class="ShapeList">
