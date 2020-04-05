@@ -72,8 +72,7 @@ export default {
       const { value: text } = this.$refs.inputText
       this.$store.dispatch('textareas/updateTextareaColor', {
         uuid,
-        text,
-        color
+        text
       })
     },
     handleEditStart() {

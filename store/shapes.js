@@ -10,15 +10,15 @@ export const state = () => ({
 export const actions = {
   add({ commit, dispatch }, payload) {
     const uuid = uuidv4()
+
     const shape = {
-      [uuid]: {
-        uuid,
-        x: 0,
-        y: 0,
-        shape: 'circle',
-        ...payload
-      }
+      uuid,
+      x: 0,
+      y: 0,
+      shape: 'circle',
+      ...payload
     }
+
     commit('add', shape)
   },
 
