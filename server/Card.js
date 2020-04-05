@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const card = new mongoose.Schema(
   {
     uuid: String,
+    deleted: Boolean,
     session: String,
     text: String,
     x: Number,

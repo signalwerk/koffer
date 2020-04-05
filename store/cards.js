@@ -1,21 +1,17 @@
 import Vue from 'vue'
-import { throttle } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
 export const state = () => ({
   cards: {}
 })
 
-const throttledPush = throttle((dispatch, payload) => {
-  dispatch('push', payload)
-}, 400)
-
 export const actions = {
   addCard({ commit, dispatch }, payload) {
-    const id = uuidv4()
+    const uuid = uuidv4()
 
     const card = {
-      id,
+      uuid,
+      deleted: false,
       x: 0,
       y: 0,
       text: '',
@@ -23,33 +19,22 @@ export const actions = {
     }
 
     commit('addCard', card)
-    dispatch('push', { mutation: 'addCard', ...card })
   },
 
   updateCard({ commit, dispatch }, payload) {
     commit('updateCard', payload)
-    dispatch('push')
   },
 
   updateCardContent({ commit, dispatch }, payload) {
     commit('updateCardContent', payload)
-    dispatch('push')
   },
+
   updateCardPosition({ commit, dispatch }, payload) {
     commit('updateCardPosition', payload)
-
-    console.log('--- updateCardPosition')
-    throttledPush(dispatch, { mutation: 'updateCardPosition', ...payload })
-    // dispatch('push', { mutation: 'updateCardPosition', ...payload })
   },
 
-  deleteCard({ commit, dispatch }, index) {
-    commit('deleteCard', index)
-    dispatch('push')
-  },
-
-  push({ state, dispatch }, payload) {
-    dispatch('socket/emit', payload, { root: true })
+  deleteCard({ commit, dispatch }, payload) {
+    commit('deleteCard', payload)
   }
 }
 
@@ -59,9 +44,24 @@ export const mutations = {
    * @param state
    */
   addCard(state, card) {
-    state.cards = {
-      ...state.cards,
-      [card.id]: card
+    Vue.set(state.cards, card.uuid, card)
+  },
+
+  nosync_restore(state, cards) {
+    console.log('nosync_restore', cards)
+    state.cards = cards
+  },
+
+  nosync_updateCard(state, card) {
+    console.log('nosync_updateCard', card)
+
+    if (card.deleted) {
+      Vue.delete(state.cards, card.uuid)
+    } else {
+      Vue.set(state.cards, card.uuid, {
+        ...state.cards[card.uuid],
+        ...card
+      })
     }
   },
 
@@ -71,14 +71,14 @@ export const mutations = {
    * @param index
    * @param card
    */
-  updateCardContent(state, { id, text }) {
-    state.cards[id].text = text
+  updateCardContent(state, { uuid, text }) {
+    state.cards[uuid].text = text
   },
 
-  updateCardPosition(state, { id, x, y, transform }) {
-    state.cards[id].x = x
-    state.cards[id].y = y
-    state.cards[id].transform = transform
+  updateCardPosition(state, { uuid, x, y, transform }) {
+    state.cards[uuid].x = x
+    state.cards[uuid].y = y
+    state.cards[uuid].transform = transform
   },
 
   /**
@@ -86,10 +86,12 @@ export const mutations = {
    * @param state
    * @param id
    */
-  deleteCard(state, id) {
-    // const { [id]: removedCard, ...newCards } = state.cards
+  deleteCard(state, { uuid, deleted }) {
+    // const { [uuid]: removedCard, ...newCards } = state.cards
     // state.cards = newCards
-    Vue.delete(state.cards, id)
-    // delete state.cards[id]
+    // Vue.delete(state.cards, uuid)
+    // delete state.cards[uuid]
+    state.cards[uuid].deleted = deleted
+    Vue.delete(state.cards, uuid)
   }
 }

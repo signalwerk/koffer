@@ -2,12 +2,7 @@
   <div class="Board">
     <div class="CardList">
       <div v-for="(card, id) in cards" :key="id" class="CardList-item">
-        <card
-          :value="card"
-          @drag="(card) => updateCardPosition(id, card)"
-          @input="(card) => updateCardContent(id, card)"
-          @delete="deleteCard(id)"
-        />
+        <card :value="card" />
       </div>
     </div>
     <div class="ShapeList">
@@ -44,19 +39,9 @@ export default {
     addShape() {
       this.$store.dispatch('shapes/add')
     },
-    updateCardContent(id, text) {
-      this.$store.dispatch('cards/updateCardContent', { id, text })
-    },
 
     updateShapePosition(id, x, y) {
       this.$store.dispatch('shapes/updatePosition', { id, x, y })
-    },
-    updateCardPosition(id, x, y) {
-      this.$store.dispatch('cards/updateCardPosition', { id, x, y })
-    },
-
-    deleteCard(id) {
-      this.$store.dispatch('cards/deleteCard', id)
     }
   }
 }

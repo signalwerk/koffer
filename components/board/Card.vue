@@ -1,13 +1,13 @@
 <template>
   <Moveable
-    ref="moveable"
     v-bind="moveable"
     @drag="handleDrag"
     :class="[isEditing ? 'is-editing' : '']"
     class="Card"
+    :style="transform"
   >
     <div class="Card--inner">
-      <button @click="$emit('delete')">
+      <button @click="deleteCard">
         <icon icon="close" size="small" />
       </button>
       <div>
@@ -58,8 +58,16 @@ export default {
       throttleDrag: 0
     }
   }),
-  mounted() {
-    this.$refs.moveable.$el.style.transform = this.value.transform
+  // mounted() {
+  //   this.$refs.moveable.$el.style.transform = this.value.transform
+  // },
+
+  computed: {
+    transform() {
+      return {
+        transform: `translate(${this.value.x}px, ${this.value.y}px)`
+      }
+    }
   },
   methods: {
     handleEditStart() {
@@ -68,20 +76,40 @@ export default {
     handleEditEnd() {
       this.isEditing = false
       this.$store.dispatch('cards/updateCardContent', {
-        id: this.value.id,
+        uuid: this.value.uuid,
         text: this.$refs.inputText.value
       })
     },
+
+    deleteCard(id) {
+      this.$store.dispatch('cards/deleteCard', {
+        uuid: this.value.uuid,
+        deleted: true
+      })
+    },
+
     handleInputClick() {
       this.$nextTick(() => {
         this.$refs.inputText.focus()
       })
     },
-    handleDrag({ target, top: y, left: x, transform }) {
-      target.style.transform = transform
+    handleDrag({
+      // target,
+      // top: y,
+      // left: x,
+      transform,
+      beforeDelta,
+      beforeDist,
+      delta,
+      dist
+    }) {
+      const x = this.value.x + delta[0]
+      const y = this.value.y + delta[1]
+
+      // target.style.transform = transform
       this.$store.dispatch('cards/updateCardPosition', {
-        id: this.value.id,
-        transform,
+        uuid: this.value.uuid,
+        // transform,
         x,
         y
       })

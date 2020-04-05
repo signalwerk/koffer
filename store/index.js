@@ -3,16 +3,13 @@ import liveSyncPlugin from '../util/socketio.js'
 const sync = liveSyncPlugin({
   modules: ['cards'], // only sync this modules
 
-  // restores save
+  // when we get a restore or update from the server
   actions: {
     cards: {
-      restore: 'cards/addCard',
-      update: 'updateCard'
+      restore: 'cards/nosync_restore',
+      update: 'cards/nosync_updateCard'
     }
-    // add: ['updateCardPosition']
   }
 })
-
-// const sync = liveSyncPlugin()
 
 export const plugins = [sync]
