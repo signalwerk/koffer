@@ -1,5 +1,5 @@
 <template>
-  <div v-on-clickaway="handleEditEnd">
+  <div>
     <Moveable
       v-bind="moveable"
       @drag="handleDrag"
@@ -130,15 +130,6 @@ export default {
 <style lang="scss" scoped>
 $size: 250px;
 $button-size: 22px;
-$colors: (
-  '.blue' #7dc8e9,
-  '.orange' #f5b57a,
-  '.green' #d3e187,
-  '.pink' #e7909a,
-  '.umbra' #efd351,
-  '.lavender' #e5acc8,
-  '.yellow' #fcf4a9
-);
 
 * {
   box-sizing: border-box;
@@ -158,11 +149,6 @@ $colors: (
     height: 100%;
     background-color: #fcf4a9;
     background-color: var(--card-bg-color);
-  }
-  @each $class, $color in $colors {
-    &#{$class} &--inner {
-      background-color: $color;
-    }
   }
 
   &--Text,
