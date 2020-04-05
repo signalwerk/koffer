@@ -1,6 +1,6 @@
 <template>
   <div class="stopwatch">
-    <div class="timer">
+    <div class="timer button-like">
       <icon icon="stopwatch" />
 
       <span class="timer-value">
@@ -97,21 +97,6 @@ export default {
 
   .timer {
     margin-right: 10px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-size: 14px;
-    line-height: 22px;
-    text-align: center;
-    letter-spacing: -0.4px;
-    text-transform: uppercase;
-
-    background: #fff;
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
-    border-radius: 4px;
-    border: none;
 
     height: 48px;
     width: 150px;
