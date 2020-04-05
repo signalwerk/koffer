@@ -5,7 +5,7 @@
     <transition name="slide" mode="out-in">
       <page-section v-if="step === 1">
         <h1 class="bold">
-          Signers Koffer
+          Let's get to know each other
         </h1>
         <p class="h2 lead">
           👋 Start right now, but first of all: What's your name?
