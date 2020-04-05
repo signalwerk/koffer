@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-on-clickaway="handleEditEnd">
     <Moveable
       v-bind="moveable"
       @drag="handleDrag"
