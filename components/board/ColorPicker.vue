@@ -19,8 +19,8 @@ import { COLORS } from '~/store/cards'
 export default {
   props: {
     value: {
-      type: String,
-      default: null
+      type: Number,
+      default: 0
     }
   },
 

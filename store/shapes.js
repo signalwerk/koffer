@@ -16,6 +16,10 @@ export const actions = {
     commit('update', payload)
   },
 
+  updateShape({ commit, dispatch }, payload) {
+    commit('updateShape', payload)
+  },
+
   updatePosition({ commit, dispatch }, payload) {
     commit('updatePosition', payload)
   },
@@ -27,11 +31,11 @@ export const actions = {
 
 export const mutations = {
   add(state) {
-    const id = uuidv4()
+    const uuid = uuidv4()
     state.shapes = {
       ...state.shapes,
-      [id]: {
-        id,
+      [uuid]: {
+        uuid,
         x: 0,
         y: 0,
         shape: 'circle'
@@ -39,13 +43,17 @@ export const mutations = {
     }
   },
 
-  updatePosition(state, { id, x, y, transform }) {
-    state.shapes[id].x = x
-    state.shapes[id].y = y
-    state.shapes[id].transform = transform
+  updateShape(state, { uuid, shape }) {
+    state.shapes[uuid].shape = shape
   },
 
-  delete(state, id) {
-    Vue.delete(state.shapes, id)
+  updatePosition(state, { uuid, x, y, transform }) {
+    state.shapes[uuid].x = x
+    state.shapes[uuid].y = y
+    state.shapes[uuid].transform = transform
+  },
+
+  delete(state, uuid) {
+    Vue.delete(state.shapes, uuid)
   }
 }

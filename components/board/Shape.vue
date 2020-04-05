@@ -70,11 +70,16 @@ export default {
     },
     handleEditEnd() {
       this.$data.isEditing = false
+      this.$data.shape = this.currentShape
+      this.$store.dispatch('shapes/updateShape', {
+        uuid: this.value.uuid,
+        shape: this.currentShape
+      })
     },
     handleDrag({ target, top: y, left: x, transform }) {
-      const { id } = this.value
+      const { uuid } = this.value
       target.style.transform = transform
-      this.$store.dispatch('shapes/updatePosition', { id, transform, x, y })
+      this.$store.dispatch('shapes/updatePosition', { uuid, transform, x, y })
     }
   }
 }
