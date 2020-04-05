@@ -10,7 +10,11 @@
       <button @click="deleteShape">
         <icon icon="close" size="small" />
       </button>
-      <svg @click="handleEditStart" viewBox="0 0 100 100">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        @click="handleEditStart"
+        viewBox="0 0 100 100"
+      >
         <circle v-if="currentShape === 'circle'" cx="50" cy="50" r="40" />
         <path v-else-if="currentShape === 'triangle'" d="M4 96 H96 L50 4Z" />
         <path
@@ -108,7 +112,6 @@ $button-size: 22px;
   width: $size;
   height: $size;
   transition: box-shadow 300ms ease-in-out;
-  filter: url('#dropshadow');
 
   &--inner {
     padding: 20px;
