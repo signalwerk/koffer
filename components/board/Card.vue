@@ -5,9 +5,9 @@
       @drag="handleDrag"
       :class="[isEditing ? 'is-editing' : '']"
       :style="transform"
-      class="Card pink"
+      class="Card"
     >
-      <div class="Card--inner">
+      <div :style="cssProps" class="Card--inner">
         <button @click="deleteCard">
           <icon icon="close" size="small" />
         </button>
@@ -35,7 +35,7 @@
     <transition name="fade-fast">
       <div class="Context-menu">
         <div v-show="isEditing" class="context Context-menuInner">
-          <color-picker :value="value.color" />
+          <color-picker :value="value.color" @input="handleColorChange" />
         </div>
       </div>
     </transition>
@@ -48,6 +48,7 @@ import { mixin as clickaway } from 'vue-clickaway'
 
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
+import { COLORS } from '~/store/cards'
 import ColorPicker from '~/components/board/ColorPicker.vue'
 import Icon from '~/components/Icon'
 
@@ -66,6 +67,7 @@ export default {
   },
   data: () => ({
     isEditing: false,
+    color: 0,
     moveable: {
       draggable: true,
       throttleDrag: 0
@@ -76,9 +78,18 @@ export default {
       return {
         transform: `translate(${this.value.x}px, ${this.value.y}px)`
       }
+    },
+    cssProps() {
+      return `--card-bg-color: ${COLORS[this.$data.color]};`
     }
   },
   methods: {
+    handleColorChange(color) {
+      const { uuid } = this.value
+      const { value: text } = this.$refs.inputText
+      this.$data.color = color
+      this.$store.dispatch('cards/updateCardColor', { uuid, text, color })
+    },
     handleEditStart() {
       this.isEditing = true
       this.$nextTick(() => {
@@ -91,7 +102,7 @@ export default {
       this.isEditing = false
       const { uuid } = this.value
       const { value: text } = this.$refs.inputText
-      const { color } = this.value
+      const { color } = this.$data
       this.$store.dispatch('cards/updateCardContent', { uuid, text, color })
     },
 
@@ -148,6 +159,7 @@ $colors: (
     padding: 20px;
     height: 100%;
     background-color: #fcf4a9;
+    background-color: var(--card-bg-color);
   }
   @each $class, $color in $colors {
     &#{$class} &--inner {
