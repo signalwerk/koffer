@@ -2,6 +2,8 @@
   <div v-on-clickaway="handleEditEnd">
     <Moveable
       v-bind="moveable"
+      @dragStart="handleDragStart"
+      @dragEnd="handleDragEnd"
       @drag="handleDrag"
       :class="[isEditing ? 'is-editing' : '']"
       :style="transform"
@@ -66,6 +68,8 @@ export default {
     }
   },
   data: () => ({
+    x: 0,
+    y: 0,
     isEditing: false,
     moveable: {
       draggable: true,
@@ -74,8 +78,12 @@ export default {
   }),
   computed: {
     transform() {
+      const x = this.isDraging ? this.x : this.value.x
+      const y = this.isDraging ? this.y : this.value.y
+
+      console.log('transform', { x, y })
       return {
-        transform: `translate(${this.value.x}px, ${this.value.y}px)`
+        transform: `translate(${x}px, ${y}px)`
       }
     },
     cssProps() {
@@ -83,6 +91,14 @@ export default {
     }
   },
   methods: {
+    handleDragStart() {
+      this.isDraging = true
+      this.x = this.value.x
+      this.y = this.value.y
+    },
+    handleDragEnd() {
+      this.isDraging = true
+    },
     handleColorChange(color) {
       const { uuid } = this.value
       const { value: text } = this.$refs.inputText
@@ -117,8 +133,11 @@ export default {
     },
 
     handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
-      const x = this.value.x + delta[0]
-      const y = this.value.y + delta[1]
+      const x = this.x + delta[0]
+      const y = this.y + delta[1]
+
+      this.x = x
+      this.y = y
       const { uuid } = this.value
       this.$store.dispatch('cards/updateCardPosition', { uuid, x, y })
     }
