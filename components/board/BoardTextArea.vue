@@ -8,10 +8,14 @@
       class="TextArea"
     >
       <div class="Textarea--inner">
-        <div v-if="!isEditing" @click="handleEditStart" class="Textarea--Text">
+        <div
+          v-show="!isEditing"
+          @click="handleEditStart"
+          class="Textarea--Text"
+        >
           {{ value.text }}
         </div>
-        <div v-else>
+        <div v-show="isEditing">
           <input
             ref="inputText"
             @click="handleInputClick"

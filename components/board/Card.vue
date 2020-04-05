@@ -11,12 +11,12 @@
         <button @click="deleteCard">
           <icon icon="close" size="small" />
         </button>
-        <div v-if="!isEditing" @click="handleEditStart" class="Card--Text">
+        <div v-show="!isEditing" @click="handleEditStart" class="Card--Text">
           <div class="Card--TextInner">
             {{ value.text }}
           </div>
         </div>
-        <div v-else class="Card--Input">
+        <div v-show="isEditing" class="Card--Input">
           <input
             ref="inputText"
             @click="handleInputClick"
