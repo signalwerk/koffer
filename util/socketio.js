@@ -41,6 +41,8 @@ export default function liveSyncPlugin(conf) {
       socket.emit('textareas:init')
       socket.emit('shapes:init')
       socket.emit('sessions:init')
+      socket.emit('textareas:init')
+      socket.emit('shapes:init')
     })
 
     socket.on('cards:restore', (data) => {
