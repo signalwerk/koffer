@@ -40,8 +40,8 @@ export const actions = {
 }
 
 export const mutations = {
-  nosync_restore(state, cards) {
-    state.cards = cards
+  nosync_restore(state, shapes) {
+    state.shapes = shapes
   },
 
   nosync_updateShape(state, shape) {

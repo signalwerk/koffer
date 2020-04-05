@@ -11,6 +11,8 @@ const io = require('socket.io')(http)
 const mongoose = require('mongoose')
 const Card = require('./Card')
 const Session = require('./Session')
+const Textarea = require('./Textarea')
+const Shape = require('./Shape')
 
 require('dotenv').config()
 
@@ -71,6 +73,50 @@ io.on('connection', (socket) => {
       })
   })
 
+  // initial state textareas
+  socket.on('textareas:init', (data) => {
+    console.log('--->>> textarea init', socket.rooms)
+
+    const session = getSession(socket)
+
+    console.log('--->>> textarea init session', session)
+
+    Textarea.find({ deleted: false, session })
+      .select({ session: 0, _id: 0, updatedAt: 0, createdAt: 0, __v: 0 })
+      .sort({ createdAt: -1 })
+      .limit(100000)
+      .exec((err, data) => {
+        if (err) return console.error(err)
+        // Send the last data to the user.
+        console.log('--->>> textarea restore', session, data)
+        io.sockets.in(`user_${session}`).emit('textareas:restore', data)
+
+        // socket.emit('textareas:restore', data)
+      })
+  })
+
+  // initial state shapes
+  socket.on('shapes:init', (data) => {
+    console.log('--->>> shape init', socket.rooms)
+
+    const session = getSession(socket)
+
+    console.log('--->>> shape init session', session)
+
+    Shape.find({ deleted: false, session })
+      .select({ session: 0, _id: 0, updatedAt: 0, createdAt: 0, __v: 0 })
+      .sort({ createdAt: -1 })
+      .limit(100000)
+      .exec((err, data) => {
+        if (err) return console.error(err)
+        // Send the last data to the user.
+        console.log('--->>> shape restore', session, data)
+        io.sockets.in(`user_${session}`).emit('shapes:restore', data)
+
+        // socket.emit('shapes:restore', data)
+      })
+  })
+
   // initial state session
   socket.on('sessions:init', (data) => {
     console.log('--->>> sessions init', socket.rooms)
@@ -118,6 +164,66 @@ io.on('connection', (socket) => {
     io.sockets.in(`user_${session}`).emit('cards:push', data)
 
     // socket.broadcast.emit('cards:push', data)
+  })
+
+  // Listen to connected users for a new mutations.
+  socket.on('shapes:mutation', (data) => {
+    console.log('--- mutation shape', data)
+    const session = getSession(socket)
+
+    const query = {
+      uuid: data.uuid
+    }
+
+    const update = { ...data, session }
+    console.log('--- mutation update', update)
+
+    const options = { upsert: true, new: true, setDefaultsOnInsert: true }
+
+    // Find the document
+    Shape.findOneAndUpdate(query, update, options, (error, result) => {
+      if (error) {
+        console.error('error', error)
+      }
+      // do something with the document
+      // console.log('findOneAndUpdate', result)
+    })
+
+    // Notify all other users about a new shape.
+    // socket.emit('shapes:push', data)
+    io.sockets.in(`user_${session}`).emit('shapes:push', data)
+
+    // socket.broadcast.emit('shapes:push', data)
+  })
+
+  // Listen to connected users for a new mutations.
+  socket.on('textareas:mutation', (data) => {
+    console.log('--- mutation textarea', data)
+    const session = getSession(socket)
+
+    const query = {
+      uuid: data.uuid
+    }
+
+    const update = { ...data, session }
+    console.log('--- mutation update', update)
+
+    const options = { upsert: true, new: true, setDefaultsOnInsert: true }
+
+    // Find the document
+    Textarea.findOneAndUpdate(query, update, options, (error, result) => {
+      if (error) {
+        console.error('error', error)
+      }
+      // do something with the document
+      // console.log('findOneAndUpdate', result)
+    })
+
+    // Notify all other users about a new textarea.
+    // socket.emit('textareas:push', data)
+    io.sockets.in(`user_${session}`).emit('textareas:push', data)
+
+    // socket.broadcast.emit('textareas:push', data)
   })
 
   // Listen to connected users for a new mutations.
