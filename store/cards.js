@@ -1,7 +1,15 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 
-export const COLORS = ['#000000', '#100000']
+export const COLORS = [
+  '#fcf4a9',
+  '#efd351',
+  '#f5b57a',
+  '#e5acc8',
+  '#e7909a',
+  '#77ddcc',
+  '#d3e187'
+]
 
 export const state = () => ({
   cards: {}
