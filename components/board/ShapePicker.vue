@@ -1,20 +1,19 @@
 <template>
   <div class="button-like">
-    <ul class="color-list">
+    <ul class="shape-list">
       <li
-        v-for="(color, index) in colors"
-        :style="`background-color: ${color}; border-color: ${color}`"
+        v-for="(shape, index) in shapes"
         :key="index"
         @click="$emit('input', index)"
         :class="{ 'is-active': value === index }"
-        class="color"
+        class="shape"
       />
     </ul>
   </div>
 </template>
 
 <script>
-import { COLORS } from '~/store/cards'
+import { SHAPES } from '~/store/shapes'
 
 export default {
   props: {
@@ -26,19 +25,19 @@ export default {
 
   data() {
     return {
-      colors: COLORS
+      shapes: SHAPES
     }
   }
 }
 </script>
 
 <style lang="scss">
-.color-list {
+.shape-list {
   list-style-type: none;
   display: flex;
   padding-left: 0;
 
-  .color {
+  .shape {
     width: 25px;
     height: 25px;
     display: block;
