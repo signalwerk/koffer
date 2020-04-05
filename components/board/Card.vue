@@ -20,7 +20,6 @@
           <input
             ref="inputText"
             @click="handleInputClick"
-            @change="handleEditEnd"
             @keydown.enter="handleEditEnd"
             :value="value.text"
           />

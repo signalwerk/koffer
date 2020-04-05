@@ -42,6 +42,8 @@ export default function liveSyncPlugin(conf) {
     })
 
     socket.on('cards:restore', (data) => {
+      console.log('--->>> card restore', data)
+
       generalRestore({ name: 'cards', actions, data, store })
     })
 
