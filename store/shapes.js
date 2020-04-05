@@ -8,8 +8,18 @@ export const state = () => ({
 })
 
 export const actions = {
-  add({ commit, dispatch }) {
-    commit('add')
+  add({ commit, dispatch }, payload) {
+    const uuid = uuidv4()
+    const shape = {
+      [uuid]: {
+        uuid,
+        x: 0,
+        y: 0,
+        shape: 'circle',
+        ...payload
+      }
+    }
+    commit('add', shape)
   },
 
   update({ commit, dispatch }, payload) {
@@ -30,17 +40,12 @@ export const actions = {
 }
 
 export const mutations = {
-  add(state) {
-    const uuid = uuidv4()
-    state.shapes = {
-      ...state.shapes,
-      [uuid]: {
-        uuid,
-        x: 0,
-        y: 0,
-        shape: 'circle'
-      }
-    }
+  add(state, shape) {
+    Vue.set(state.shapes, shape.uuid, shape)
+  },
+
+  nosync_restore(state, cards) {
+    state.cards = cards
   },
 
   updateShape(state, { uuid, shape }) {
