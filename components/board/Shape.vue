@@ -1,10 +1,12 @@
 <template>
   <div v-on-clickaway="handleEditEnd">
     <Moveable
-      ref="moveable"
       v-bind="moveable"
+      @dragStart="handleDragStart"
+      @dragEnd="handleDragEnd"
       @drag="handleDrag"
       :class="[isEditing ? 'is-editing' : '']"
+      :style="transform"
       class="Shape"
     >
       <button @click="deleteShape">
@@ -53,6 +55,8 @@ export default {
     }
   },
   data: () => ({
+    x: 0,
+    y: 0,
     isEditing: false,
     shapeIndex: 0,
     shape: SHAPES[0],
@@ -62,11 +66,27 @@ export default {
     }
   }),
   computed: {
+    transform() {
+      const x = this.isDraging ? this.x : this.value.x
+      const y = this.isDraging ? this.y : this.value.y
+
+      return {
+        transform: `translate(${x}px, ${y}px)`
+      }
+    },
     currentShape() {
       return SHAPES[this.$data.shapeIndex]
     }
   },
   methods: {
+    handleDragStart() {
+      this.isDraging = true
+      this.x = this.value.x
+      this.y = this.value.y
+    },
+    handleDragEnd() {
+      this.isDraging = true
+    },
     handleUpdateShape(shapeIndex) {
       this.$data.shapeIndex = shapeIndex
       const { uuid } = this.value
@@ -85,9 +105,13 @@ export default {
         shape: this.currentShape
       })
     },
-    handleDrag({ target, top: y, left: x, transform }) {
+    handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
+      const x = this.x + delta[0]
+      const y = this.y + delta[1]
+
+      this.x = x
+      this.y = y
       const { uuid } = this.value
-      target.style.transform = transform
       this.$store.dispatch('shapes/updatePosition', { uuid, x, y })
     },
     deleteShape(id) {
