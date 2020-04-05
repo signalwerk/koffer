@@ -1,8 +1,10 @@
+import VuexPersistence from 'vuex-persist'
 import liveSyncPlugin from '../util/socketio.js'
-// import VuexPersistence from 'vuex-persist'
-// const vuexLocal = new VuexPersistence({
-//   storage: window.localStorage
-// })
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage,
+  modules: ['me']
+})
 
 const sync = liveSyncPlugin({
   modules: ['cards'], // only sync this modules
@@ -16,4 +18,4 @@ const sync = liveSyncPlugin({
   }
 })
 
-export const plugins = [sync]
+export const plugins = [sync, vuexLocal.plugin]

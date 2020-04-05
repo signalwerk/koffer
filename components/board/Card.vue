@@ -1,5 +1,5 @@
 <template>
-  <div v-on-clickaway="handleEditEnd">
+  <div>
     <Moveable
       v-bind="moveable"
       @drag="handleDrag"
@@ -20,12 +20,13 @@
           <input
             ref="inputText"
             @click="handleInputClick"
+            @change="handleEditEnd"
             @keydown.enter="handleEditEnd"
             :value="value.text"
           />
         </div>
       </div>
-      <details v-if="false">
+      <details v-if="true">
         <summary>debug info</summary>
         <code>
           <pre>{{ JSON.stringify(value, null, 2) }}</pre>
@@ -67,7 +68,6 @@ export default {
   },
   data: () => ({
     isEditing: false,
-    color: 0,
     moveable: {
       draggable: true,
       throttleDrag: 0
@@ -80,14 +80,13 @@ export default {
       }
     },
     cssProps() {
-      return `--card-bg-color: ${COLORS[this.$data.color]};`
+      return `--card-bg-color: ${COLORS[this.value.color]};`
     }
   },
   methods: {
     handleColorChange(color) {
       const { uuid } = this.value
       const { value: text } = this.$refs.inputText
-      this.$data.color = color
       this.$store.dispatch('cards/updateCardColor', { uuid, text, color })
     },
     handleEditStart() {
@@ -102,8 +101,7 @@ export default {
       this.isEditing = false
       const { uuid } = this.value
       const { value: text } = this.$refs.inputText
-      const { color } = this.$data
-      this.$store.dispatch('cards/updateCardContent', { uuid, text, color })
+      this.$store.dispatch('cards/updateCardContent', { uuid, text })
     },
 
     deleteCard(id) {

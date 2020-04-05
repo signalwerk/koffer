@@ -1,3 +1,4 @@
+// this is a nuxt-store plugin to sync state to
 // https://socket.io/docs/rooms-and-namespaces/ >>> namespaces
 // https://vuex.vuejs.org/guide/plugins.html
 
@@ -5,7 +6,7 @@ import io from 'socket.io-client'
 import { throttle } from 'lodash'
 
 // // const socket = io('https://signers-koffer.herokuapp.com')
-const socket = io(process.env.SOCKETIO_URL)
+export const socket = io(process.env.SOCKETIO_URL)
 
 const throttledEmit = throttle((event, payload) => {
   socket.emit(event, payload)
@@ -13,18 +14,15 @@ const throttledEmit = throttle((event, payload) => {
 
 export default function liveSyncPlugin(conf) {
   // eslint-disable-next-line
-  let sessionID = null
+  // let sessionID = null
   const modules = conf.modules || []
   const actions = conf.actions || {}
 
   return (store) => {
     // called when the store is initialized
     socket.on('session:init', (data) => {
-      sessionID = data.session
-
-      socket.emit('cards:init', {
-        session: sessionID
-      })
+      // sessionID = data.session
+      socket.emit('cards:init')
     })
 
     socket.on('cards:restore', (data) => {
@@ -52,8 +50,9 @@ export default function liveSyncPlugin(conf) {
       if (modules.includes(module)) {
         // do we have to sync this mutation?
         if (!mutation.startsWith('nosync_')) {
+          console.log('--- mutation card', _mutation.payload)
           throttledEmit(`${module}:mutation`, {
-            session: sessionID,
+            // session: sessionID,
             ..._mutation.payload
           })
         }
