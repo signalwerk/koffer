@@ -55,7 +55,7 @@ export default {
     },
 
     addShape() {
-      this.$store.dispatch('shapes/add')
+      this.$store.dispatch('shapes/addShape')
     },
 
     addTextarea() {

@@ -38,6 +38,8 @@ export default function liveSyncPlugin(conf) {
     socket.on('session:boot', (data) => {
       // sessionID = data.session
       socket.emit('cards:init')
+      socket.emit('textareas:init')
+      socket.emit('shapes:init')
       socket.emit('sessions:init')
     })
 
