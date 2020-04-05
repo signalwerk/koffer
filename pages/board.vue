@@ -162,12 +162,4 @@ export default {
   overflow: hidden;
   grid-area: main;
 }
-
-.context {
-  position: fixed;
-  z-index: 99999;
-  top: 80px;
-  left: calc(50% + 80px);
-  transform: translateX(-50%);
-}
 </style>
