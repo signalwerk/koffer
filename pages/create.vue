@@ -42,18 +42,6 @@
         </p>
 
         <div>
-          <h2 class="h5 bold">Send link to invite more administrators</h2>
-          <p>
-            Administrators host and moderate the session.
-          </p>
-          <link-container
-            :link="
-              `https://signers-koffer.github.io/koffer/board/?id=${uuid}&admin=${admin}`
-            "
-          />
-        </div>
-
-        <div>
           <h2 class="h5 bold">Send link to invite participants</h2>
           <link-container
             :link="`https://signers-koffer.github.io/koffer/board/?id=${uuid}`"
