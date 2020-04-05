@@ -3,8 +3,8 @@
     v-bind="moveable"
     @drag="handleDrag"
     :class="[isEditing ? 'is-editing' : '']"
-    class="Card"
     :style="transform"
+    class="Card"
   >
     <div class="Card--inner">
       <button @click="deleteCard">
@@ -25,8 +25,8 @@
           />
         </label>
       </div>
-      <details>
-        <summary>[i]</summary>
+      <details v-if="false">
+        <summary>debug info</summary>
         <code>
           <pre>{{ JSON.stringify(value, null, 2) }}</pre>
         </code>
