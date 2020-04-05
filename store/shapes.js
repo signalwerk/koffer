@@ -34,8 +34,8 @@ export const actions = {
     commit('updatePosition', payload)
   },
 
-  delete({ commit, dispatch }, index) {
-    commit('delete', index)
+  delete({ commit, dispatch }, payload) {
+    commit('delete', payload)
   }
 }
 

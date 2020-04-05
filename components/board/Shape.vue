@@ -7,6 +7,9 @@
       :class="[isEditing ? 'is-editing' : '']"
       class="Shape"
     >
+      <button @click="deleteShape">
+        <icon icon="close" size="small" />
+      </button>
       <svg @click="handleEditStart" viewBox="0 0 100 100">
         <circle v-if="currentShape === 'circle'" cx="50" cy="50" r="40" />
         <path v-else-if="currentShape === 'triangle'" d="M4 96 H96 L50 4Z" />
@@ -34,12 +37,10 @@ import { mixin as clickaway } from 'vue-clickaway'
 import Moveable from 'vue-moveable'
 import { SHAPES } from '~/store/shapes'
 import ShapePicker from '~/components/board/ShapePicker.vue'
+import Icon from '~/components/Icon'
 
 export default {
-  components: {
-    Moveable,
-    ShapePicker
-  },
+  components: { Moveable, ShapePicker, Icon },
   mixins: [clickaway],
   props: {
     value: {
@@ -84,6 +85,11 @@ export default {
       const { uuid } = this.value
       target.style.transform = transform
       this.$store.dispatch('shapes/updatePosition', { uuid, transform, x, y })
+    },
+    deleteShape(id) {
+      this.$store.dispatch('shapes/delete', {
+        uuid: this.value.uuid
+      })
     }
   }
 }
@@ -91,6 +97,7 @@ export default {
 
 <style lang="scss" scoped>
 $size: 250px;
+$button-size: 22px;
 
 * {
   box-sizing: border-box;
@@ -120,6 +127,31 @@ $size: 250px;
     stroke: black;
     stroke-width: 3;
     fill: transparent;
+  }
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    background: transparent;
+    border: none;
+    padding: 5px;
+    width: $button-size;
+    height: $button-size;
+  }
+
+  &:hover .icon,
+  &:hover .icon > img {
+    opacity: 1;
+  }
+
+  @at-root {
+    .icon,
+    .icon > img {
+      display: inline-block;
+      opacity: 0;
+      transition: opacity 300ms ease-in-out;
+    }
   }
 }
 
