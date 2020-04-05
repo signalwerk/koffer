@@ -37,8 +37,8 @@
     </transition>
 
     <transition name="fade-fast">
-      <div class="context" v-show="hasContextMenu">
-        I'm a context menu
+      <div v-show="hasContextMenu" class="context">
+        <color-picker v-model="color" />
       </div>
     </transition>
 
@@ -51,9 +51,10 @@ import { mapState } from 'vuex'
 import Board from '~/components/board/Board.vue'
 import NavItem from '~/components/board/NavItem.vue'
 import StopWatch from '~/components/board/StopWatch.vue'
+import ColorPicker from '~/components/board/ColorPicker.vue'
 
 export default {
-  components: { NavItem, Board, StopWatch },
+  components: { NavItem, Board, StopWatch, ColorPicker },
 
   transition: {
     name: 'slide-fade',
@@ -65,6 +66,7 @@ export default {
       activeTool: 'select',
       hasStopwatch: false,
       hasContextMenu: false,
+      color: null,
       navItems: [
         { item: 'select', handler: () => {} },
         { item: 'artboard', handler: this.toggleContextMenu },

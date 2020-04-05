@@ -3,35 +3,34 @@
     v-bind="moveable"
     @drag="handleDrag"
     :class="[isEditing ? 'is-editing' : '']"
-    class="Card"
     :style="transform"
+    class="Card pink"
   >
     <div class="Card--inner">
       <button @click="deleteCard">
         <icon icon="close" size="small" />
       </button>
-      <div>
-        <label>
-          <div v-if="!isEditing" @click="handleEditStart">
-            <icon icon="draw" size="small" />: {{ value.text }}
-          </div>
-          <input
-            ref="inputText"
-            v-else
-            @click="handleInputClick"
-            @keydown.enter="handleEditEnd"
-            @blur="handleEditEnd"
-            :value="value.text"
-          />
-        </label>
+      <div v-if="!isEditing" @click="handleEditStart" class="Card--Text">
+        <div class="Card--TextInner">
+          {{ value.text }}
+        </div>
       </div>
-      <details>
-        <summary>[i]</summary>
-        <code>
-          <pre>{{ JSON.stringify(value, null, 2) }}</pre>
-        </code>
-      </details>
+      <label v-else>
+        <input
+          ref="inputText"
+          @click="handleInputClick"
+          @keydown.enter="handleEditEnd"
+          @blur="handleEditEnd"
+          :value="value.text"
+        />
+      </label>
     </div>
+    <details v-if="false">
+      <summary>debug info</summary>
+      <code>
+        <pre>{{ JSON.stringify(value, null, 2) }}</pre>
+      </code>
+    </details>
   </Moveable>
 </template>
 
@@ -58,10 +57,6 @@ export default {
       throttleDrag: 0
     }
   }),
-  // mounted() {
-  //   this.$refs.moveable.$el.style.transform = this.value.transform
-  // },
-
   computed: {
     transform() {
       return {
@@ -72,13 +67,16 @@ export default {
   methods: {
     handleEditStart() {
       this.isEditing = true
+      this.$nextTick(() => {
+        this.$refs.inputText.focus()
+      })
     },
+
     handleEditEnd() {
       this.isEditing = false
-      this.$store.dispatch('cards/updateCardContent', {
-        uuid: this.value.uuid,
-        text: this.$refs.inputText.value
-      })
+      const { uuid } = this.value
+      const { value: text } = this.$refs.inputText
+      this.$store.dispatch('cards/updateCardContent', { uuid, text })
     },
 
     deleteCard(id) {
@@ -93,26 +91,12 @@ export default {
         this.$refs.inputText.focus()
       })
     },
-    handleDrag({
-      // target,
-      // top: y,
-      // left: x,
-      transform,
-      beforeDelta,
-      beforeDist,
-      delta,
-      dist
-    }) {
+
+    handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
       const x = this.value.x + delta[0]
       const y = this.value.y + delta[1]
-
-      // target.style.transform = transform
-      this.$store.dispatch('cards/updateCardPosition', {
-        uuid: this.value.uuid,
-        // transform,
-        x,
-        y
-      })
+      const { uuid } = this.value
+      this.$store.dispatch('cards/updateCardPosition', { uuid, x, y })
     }
   }
 }
@@ -121,6 +105,15 @@ export default {
 <style lang="scss" scoped>
 $size: 250px;
 $button-size: 22px;
+$colors: (
+  '.blue' #7dc8e9,
+  '.orange' #f5b57a,
+  '.green' #d3e187,
+  '.pink' #e7909a,
+  '.umbra' #efd351,
+  '.lavender' #e5acc8,
+  '.yellow' #fcf4a9
+);
 
 * {
   box-sizing: border-box;
@@ -130,13 +123,28 @@ $button-size: 22px;
   position: absolute;
   width: $size;
   height: $size;
-  box-shadow: 0 0 0 rgba(100, 100, 100, 0.4);
+  box-shadow: 1px 1px 3px rgba(100, 100, 100, 0.4);
   transition: box-shadow 300ms ease-in-out;
 
   &--inner {
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     height: 100%;
-    background-color: #fefac7;
+    background-color: #fcf4a9;
+  }
+  @each $class, $color in $colors {
+    &#{$class} &--inner {
+      background-color: $color;
+    }
+  }
+  &--Text {
+    text-align: center;
+    // outline: 1px dashed red;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   &.is-editing {
     z-index: 1;

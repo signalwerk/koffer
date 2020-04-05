@@ -1,8 +1,8 @@
 {
-  "name": "koffer",
+  "name": "PLACE",
   "version": "1.0.0",
-  "description": "Moderationskoffer",
-  "author": "versusvirus",
+  "description": "Platform and Coworking Experience",
+  "author": "#versusvirus",
   "private": true,
   "scripts": {
     "dev": "nuxt",
