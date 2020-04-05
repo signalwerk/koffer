@@ -15,7 +15,7 @@
       class="button"
     />
 
-    <button class="button button--secondary" @click="reset">
+    <button @click="reset" class="button button--secondary">
       Reset
     </button>
   </div>

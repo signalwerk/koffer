@@ -3,8 +3,8 @@
     v-bind="moveable"
     @drag="handleDrag"
     :class="[isEditing ? 'is-editing' : '']"
-    class="Card"
     :style="transform"
+    class="Card"
   >
     <div class="Card--inner">
       <button @click="deleteCard">
@@ -136,7 +136,7 @@ $button-size: 22px;
   &--inner {
     padding: 20px;
     height: 100%;
-    background-color: #fefac7;
+    background-color: #fcf4a9;
   }
   &.is-editing {
     z-index: 1;
