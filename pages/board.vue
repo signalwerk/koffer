@@ -36,13 +36,11 @@
       <stop-watch v-show="hasStopwatch" class="context" />
     </transition>
 
-    <transition name="fade-fast">
-      <div v-show="hasContextMenu" class="context">
-        <color-picker v-model="color" />
-      </div>
-    </transition>
-
-    <board ref="board" class="board" />
+    <board
+      ref="board"
+      @contextOpen.capture="hasStopwatch = false"
+      class="board"
+    />
   </div>
 </template>
 
@@ -51,10 +49,9 @@ import { mapState } from 'vuex'
 import Board from '~/components/board/Board.vue'
 import NavItem from '~/components/board/NavItem.vue'
 import StopWatch from '~/components/board/StopWatch.vue'
-import ColorPicker from '~/components/board/ColorPicker.vue'
 
 export default {
-  components: { NavItem, Board, StopWatch, ColorPicker },
+  components: { NavItem, Board, StopWatch },
 
   transition: {
     name: 'slide-fade',
@@ -65,11 +62,10 @@ export default {
     return {
       activeTool: 'select',
       hasStopwatch: false,
-      hasContextMenu: false,
       color: null,
       navItems: [
         { item: 'select', handler: () => {} },
-        { item: 'artboard', handler: this.toggleContextMenu },
+        { item: 'artboard', handler: () => {} },
         { item: 'sticky-note', handler: this.addSticky },
         { item: 'text', handler: () => {} },
         { item: 'shape', handler: this.addShape },
@@ -94,13 +90,7 @@ export default {
     },
 
     toggleStopwatch() {
-      this.hasContextMenu = false
       this.hasStopwatch = !this.hasStopwatch
-    },
-
-    toggleContextMenu() {
-      this.hasStopwatch = false
-      this.hasContextMenu = !this.hasContextMenu
     }
   }
 }
@@ -161,13 +151,5 @@ export default {
 .board {
   overflow: hidden;
   grid-area: main;
-}
-
-.context {
-  position: fixed;
-  z-index: 99999;
-  top: 80px;
-  left: calc(50% + 80px);
-  transform: translateX(-50%);
 }
 </style>
