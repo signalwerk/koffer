@@ -34,7 +34,7 @@
     <div class="video-container">
       <div class="video-button-container">
         <h2 class="bold h4 center">
-          Get started right now - free and without login or registration!
+          Get started right now – <br />free and without login or registration!
         </h2>
         <nuxt-link to="/create" tag="button" class="button button--primary">
           Create a session
@@ -52,7 +52,7 @@
   display: flex;
   flex-direction: column;
 
-  @media only screen and (min-width: 1180px) {
+  @media only screen and (min-width: 1000px) {
     flex-direction: row;
   }
 
@@ -64,9 +64,17 @@
 
   .main {
     padding-top: 80px;
-    padding-left: 128px;
-    padding-right: 128px;
-    height: 100vh;
+    padding-left: 64px;
+    padding-right: 64px;
+
+    @media only screen and (min-width: 1000px) {
+      height: 100vh;
+    }
+
+    @media only screen and (min-width: 1180px) {
+      padding-left: 128px;
+      padding-right: 128px;
+    }
   }
 
   .title {
@@ -88,13 +96,17 @@
 
   .video-container {
     width: 100%;
-    height: 100vh;
+    height: 33vh;
     flex: 1 0 auto;
 
     background-color: #f8f8fc;
 
     position: relative;
 
+    @media only screen and (min-width: 1000px) {
+      width: 400px;
+      height: 100vh;
+    }
     @media only screen and (min-width: 1180px) {
       width: 576px;
     }
