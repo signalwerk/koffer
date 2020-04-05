@@ -49,6 +49,7 @@ import { mapState } from 'vuex'
 import Board from '~/components/board/Board.vue'
 import NavItem from '~/components/board/NavItem.vue'
 import StopWatch from '~/components/board/StopWatch.vue'
+import { socket } from '~/util/socketio'
 
 export default {
   components: { NavItem, Board, StopWatch },
@@ -56,6 +57,12 @@ export default {
   transition: {
     name: 'slide-fade',
     mode: 'out-in'
+  },
+
+  created() {
+    const id = this.$router.currentRoute.params.id
+    socket.emit('session:join', id)
+    console.log('joindedboard: ', id)
   },
 
   data() {
@@ -77,7 +84,7 @@ export default {
   },
 
   computed: {
-    ...mapState('session', ['sessionName'])
+    ...mapState('sessions', ['sessionName'])
   },
 
   methods: {
