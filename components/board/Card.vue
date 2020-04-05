@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-on-clickaway="handleEditEnd">
     <Moveable
       v-bind="moveable"
       @drag="handleDrag"
@@ -20,7 +20,6 @@
           <input
             ref="inputText"
             @click="handleInputClick"
-            @change="handleEditEnd"
             @keydown.enter="handleEditEnd"
             :value="value.text"
           />
