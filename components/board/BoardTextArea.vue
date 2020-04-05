@@ -128,6 +128,15 @@ button {
   width: $button-size;
   height: $button-size;
   margin-left: 10px;
+  cursor: pointer;
+
+  transition: opacity ease-in-out 300ms;
+
+  opacity: 0;
+}
+
+.TextArea:hover button {
+  opacity: 1;
 }
 
 input {

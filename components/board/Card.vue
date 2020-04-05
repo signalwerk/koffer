@@ -190,6 +190,7 @@ button {
   width: $button-size;
   height: $button-size;
 }
+
 .icon,
 .icon > img {
   display: inline-block;
