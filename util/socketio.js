@@ -47,6 +47,18 @@ export default function liveSyncPlugin(conf) {
       generalRestore({ name: 'cards', actions, data, store })
     })
 
+    socket.on('textareas:restore', (data) => {
+      console.log('--->>> textarea restore', data)
+
+      generalRestore({ name: 'textareas', actions, data, store })
+    })
+
+    socket.on('shapes:restore', (data) => {
+      console.log('--->>> shape restore', data)
+
+      generalRestore({ name: 'shapes', actions, data, store })
+    })
+
     socket.on('sessions:restore', (data) => {
       console.log('got sessions:restore', data)
       generalRestore({ name: 'sessions', actions, data, store })
@@ -54,6 +66,14 @@ export default function liveSyncPlugin(conf) {
 
     socket.on('cards:push', (data) => {
       generalPush({ name: 'cards', actions, data, store })
+    })
+
+    socket.on('textareas:push', (data) => {
+      generalPush({ name: 'textareas', actions, data, store })
+    })
+
+    socket.on('shapes:push', (data) => {
+      generalPush({ name: 'shapes', actions, data, store })
     })
 
     socket.on('sessions:push', (data) => {
