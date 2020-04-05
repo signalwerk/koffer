@@ -33,7 +33,13 @@
     </aside>
 
     <transition name="fade-fast">
-      <stop-watch v-show="hasStopwatch" class="stopwatch" />
+      <stop-watch v-show="hasStopwatch" class="context" />
+    </transition>
+
+    <transition name="fade-fast">
+      <div class="context" v-show="hasContextMenu">
+        I'm a context menu
+      </div>
     </transition>
 
     <board ref="board" class="board" />
@@ -58,9 +64,10 @@ export default {
     return {
       activeTool: 'select',
       hasStopwatch: false,
+      hasContextMenu: false,
       navItems: [
         { item: 'select', handler: () => {} },
-        { item: 'artboard', handler: () => {} },
+        { item: 'artboard', handler: this.toggleContextMenu },
         { item: 'sticky-note', handler: this.addSticky },
         { item: 'text', handler: () => {} },
         { item: 'shape', handler: this.addShape },
@@ -79,12 +86,19 @@ export default {
     addShape() {
       this.$refs.board.addShape()
     },
+
     addSticky() {
       this.$refs.board.addCard()
     },
 
     toggleStopwatch() {
+      this.hasContextMenu = false
       this.hasStopwatch = !this.hasStopwatch
+    },
+
+    toggleContextMenu() {
+      this.hasStopwatch = false
+      this.hasContextMenu = !this.hasContextMenu
     }
   }
 }
@@ -147,7 +161,7 @@ export default {
   grid-area: main;
 }
 
-.stopwatch {
+.context {
   position: fixed;
   z-index: 99999;
   top: 80px;
