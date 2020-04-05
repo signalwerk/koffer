@@ -9,6 +9,7 @@
       <div v-for="(shape, id) in shapes" :key="id" class="ShapeList-item">
         <shape
           :value="shape"
+          @contextOpen="$emit('contextOpen')"
           @drag="(shape) => updateShapePosition(id, shape)"
         />
       </div>

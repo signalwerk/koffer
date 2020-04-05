@@ -70,6 +70,7 @@ export default {
     },
     handleEditStart() {
       this.$data.isEditing = true
+      this.$emit('contextOpen')
     },
     handleEditEnd() {
       this.$data.isEditing = false
