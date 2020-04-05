@@ -96,7 +96,7 @@ export default {
           item: 'text',
           name: 'Add a text',
           disabled: false,
-          handler: () => {}
+          handler: this.addTextarea
         },
         {
           item: 'shape',
@@ -143,6 +143,10 @@ export default {
 
     addSticky() {
       this.$refs.board.addCard()
+    },
+
+    addTextarea() {
+      this.$refs.board.addTextarea()
     },
 
     toggleStopwatch() {

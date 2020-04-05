@@ -13,6 +13,19 @@
         />
       </div>
     </div>
+
+    <div class="TextareaList">
+      <div
+        v-for="(textarea, id) in textareas"
+        :key="id"
+        class="TextareaList-item"
+      >
+        <board-text-area
+          :value="textarea"
+          @drag="(textarea) => updateTextareaPosition(id, textarea)"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -20,24 +33,32 @@
 import { createNamespacedHelpers } from 'vuex'
 import Card from '~/components/board/Card'
 import Shape from '~/components/board/Shape'
+import BoardTextArea from '~/components/board/BoardTextArea'
 
 const { mapState: mapCardsState } = createNamespacedHelpers('cards')
 const { mapState: mapShapesState } = createNamespacedHelpers('shapes')
+const { mapState: mapTextareaState } = createNamespacedHelpers('textareas')
 
 export default {
-  components: { Card, Shape },
+  components: { Card, Shape, BoardTextArea },
 
   computed: {
     ...mapCardsState(['cards']),
-    ...mapShapesState(['shapes'])
+    ...mapShapesState(['shapes']),
+    ...mapTextareaState(['textareas'])
   },
 
   methods: {
     addCard() {
       this.$store.dispatch('cards/addCard')
     },
+
     addShape() {
       this.$store.dispatch('shapes/add')
+    },
+
+    addTextarea() {
+      this.$store.dispatch('textareas/addTextarea')
     },
 
     updateShapePosition(id, x, y) {
