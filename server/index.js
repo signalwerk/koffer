@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
     socket.join(`user_${session}`)
     // io.sockets.in(session).emit('session:init')
 
-    socket.emit('session:init')
+    socket.emit('session:boot')
   })
 
   // socket.emit('session:init', { session: sessionID })
@@ -43,29 +43,31 @@ io.on('connection', (socket) => {
 
   // initial state cards
   socket.on('cards:init', (data) => {
-    console.log('--->>> card init in session', socket.rooms)
+    console.log('--->>> card init', socket.rooms)
     Card.find({ deleted: false })
       .select({ session: 0, _id: 0, updatedAt: 0, createdAt: 0, __v: 0 })
       .sort({ createdAt: -1 })
       .limit(100000)
-      .exec((err, mutations) => {
+      .exec((err, data) => {
         if (err) return console.error(err)
-        // Send the last mutations to the user.
-        // io.sockets.in(session).emit('cards:restore', mutations)
-        socket.emit('cards:restore', mutations)
+        // Send the last data to the user.
+        // io.sockets.in(session).emit('cards:restore', data)
+        socket.emit('cards:restore', data)
       })
   })
 
   // initial state session
   socket.on('sessions:init', (data) => {
-    Session.find({ deleted: false, uuid: data.uuid })
-      .select({ session: 0, _id: 0, updatedAt: 0, createdAt: 0, __v: 0 })
+    console.log('--->>> sessions init', socket.rooms)
+    Session.find()
+      .select({ _id: 0, updatedAt: 0, createdAt: 0, __v: 0 })
       .sort({ createdAt: -1 })
       .limit(1)
-      .exec((err, mutations) => {
+      .exec((err, data) => {
         if (err) return console.error(err)
-        // Send the last mutations to the user.
-        socket.emit('sessions:restore', mutations)
+        console.log('--->>> sessions init data', data)
+        // Send the last data to the user.
+        socket.emit('sessions:restore', data)
       })
   })
 
@@ -91,6 +93,31 @@ io.on('connection', (socket) => {
 
     // Notify all other users about a new card.
     socket.emit('cards:push', data)
+    // socket.broadcast.emit('cards:push', data)
+  })
+
+  // Listen to connected users for a new mutations.
+  socket.on('sessions:mutation', (data) => {
+    console.log('--- mutation sessions', data)
+
+    const query = {
+      uuid: data.uuid
+    }
+
+    const update = data
+    const options = { upsert: true, new: true, setDefaultsOnInsert: true }
+
+    // Find the document
+    Session.findOneAndUpdate(query, update, options, (error, result) => {
+      if (error) {
+        console.error('error', error)
+      }
+      // do something with the document
+      // console.log('findOneAndUpdate', result)
+    })
+
+    // Notify all other users about a new card.
+    socket.emit('sessions:push', data)
     // socket.broadcast.emit('cards:push', data)
   })
 })

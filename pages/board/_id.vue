@@ -2,10 +2,13 @@
   <div class="board-container">
     <header class="header">
       <div class="bold">
-        {{ sessionName }}
+        {{
+          sessions[this.$router.currentRoute.params.id] &&
+            sessions[this.$router.currentRoute.params.id].name
+        }}
       </div>
       <div>
-        Zoom placeholder
+        View: 100%
       </div>
       <div>
         <span class="participants-dropdown">
@@ -49,11 +52,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import Board from '~/components/board/Board.vue'
 import NavItem from '~/components/board/NavItem.vue'
 import StopWatch from '~/components/board/StopWatch.vue'
 import { socket } from '~/util/socketio'
+
+const { mapState: mapSessionsState } = createNamespacedHelpers('sessions')
 
 export default {
   components: { NavItem, Board, StopWatch },
@@ -128,7 +133,7 @@ export default {
   },
 
   computed: {
-    ...mapState('sessions', ['sessionName'])
+    ...mapSessionsState(['sessions'])
   },
 
   methods: {
