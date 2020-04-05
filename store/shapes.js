@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 
+export const SHAPES = ['circle', 'triangle', 'rectangle']
+
 export const state = () => ({
   shapes: {}
 })
@@ -32,7 +34,7 @@ export const mutations = {
         id,
         x: 0,
         y: 0,
-        type: 'rect' // rect | circle | triangle
+        shape: 'circle'
       }
     }
   },
