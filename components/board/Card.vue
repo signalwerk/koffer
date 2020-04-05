@@ -178,6 +178,11 @@ $colors: (
     z-index: 1;
     box-shadow: 15px 3px 25px rgba(100, 100, 100, 0.4);
   }
+
+  &:hover .icon,
+  &:hover .icon > img {
+    opacity: 1;
+  }
 }
 
 input {
@@ -203,6 +208,8 @@ button {
 .icon,
 .icon > img {
   display: inline-block;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
 }
 
 .Context-menu {
