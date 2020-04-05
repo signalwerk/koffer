@@ -16,7 +16,7 @@ export const actions = {
       deleted: false,
       x: 0,
       y: 0,
-      shape: 'circle',
+      shape: 0,
       ...payload
     }
 

@@ -5,7 +5,7 @@ const shape = new mongoose.Schema(
     uuid: String,
     deleted: Boolean,
     session: String,
-    shape: String,
+    shape: Number,
     x: Number,
     y: Number
   },

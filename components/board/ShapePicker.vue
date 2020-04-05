@@ -5,7 +5,7 @@
         v-for="(shape, index) in shapes"
         :key="index"
         @click="$emit('input', index)"
-        :class="[{ 'is-active': value === index }, shape]"
+        :class="[{ 'is-active': value === index }, shapes[index]]"
         class="shape"
       />
     </ul>

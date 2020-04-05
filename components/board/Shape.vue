@@ -28,7 +28,7 @@
     <transition name="fade-fast">
       <div class="Context-menu">
         <div v-show="isEditing" class="context Context-menuInner">
-          <shape-picker :value="shapeIndex" @input="handleUpdateShape" />
+          <shape-picker :value="value.shape" @input="handleUpdateShape" />
         </div>
       </div>
     </transition>
@@ -59,7 +59,6 @@ export default {
     y: 0,
     isEditing: false,
     shapeIndex: 0,
-    shape: SHAPES[0],
     moveable: {
       draggable: true,
       throttleDrag: 0
@@ -75,7 +74,7 @@ export default {
       }
     },
     currentShape() {
-      return SHAPES[this.$data.shapeIndex]
+      return SHAPES[this.value.shape]
     }
   },
   methods: {
@@ -87,10 +86,8 @@ export default {
     handleDragEnd() {
       this.isDraging = true
     },
-    handleUpdateShape(shapeIndex) {
-      this.$data.shapeIndex = shapeIndex
+    handleUpdateShape(shape) {
       const { uuid } = this.value
-      const shape = this.currentShape
       this.$store.dispatch('shapes/updateShape', { uuid, shape })
     },
     handleEditStart() {
@@ -99,11 +96,11 @@ export default {
     },
     handleEditEnd() {
       this.$data.isEditing = false
-      this.$data.shape = this.currentShape
-      this.$store.dispatch('shapes/updateShape', {
-        uuid: this.value.uuid,
-        shape: this.currentShape
-      })
+      // this.$data.shape = this.currentShape
+      // this.$store.dispatch('shapes/updateShape', {
+      //   uuid: this.value.uuid,
+      //   shape: this.currentShape
+      // })
     },
     handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
       const x = this.x + delta[0]
@@ -116,7 +113,8 @@ export default {
     },
     deleteShape(id) {
       this.$store.dispatch('shapes/delete', {
-        uuid: this.value.uuid
+        uuid: this.value.uuid,
+        deleted: true
       })
     }
   }

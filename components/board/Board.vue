@@ -7,11 +7,7 @@
     </div>
     <div class="ShapeList">
       <div v-for="(shape, id) in shapes" :key="id" class="ShapeList-item">
-        <shape
-          :value="shape"
-          @contextOpen="$emit('contextOpen')"
-          @drag="(shape) => updateShapePosition(id, shape)"
-        />
+        <shape :value="shape" @contextOpen="$emit('contextOpen')" />
       </div>
     </div>
 
@@ -21,10 +17,7 @@
         :key="id"
         class="TextareaList-item"
       >
-        <board-text-area
-          :value="textarea"
-          @drag="(textarea) => updateTextareaPosition(id, textarea)"
-        />
+        <board-text-area :value="textarea" />
       </div>
     </div>
   </div>
@@ -60,10 +53,6 @@ export default {
 
     addTextarea() {
       this.$store.dispatch('textareas/addTextarea')
-    },
-
-    updateShapePosition(id, x, y) {
-      this.$store.dispatch('shapes/updatePosition', { id, x, y })
     }
   }
 }

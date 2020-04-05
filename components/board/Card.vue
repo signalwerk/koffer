@@ -100,8 +100,7 @@ export default {
     },
     handleColorChange(color) {
       const { uuid } = this.value
-      const { value: text } = this.$refs.inputText
-      this.$store.dispatch('cards/updateCardColor', { uuid, text, color })
+      this.$store.dispatch('cards/updateCardColor', { uuid, color })
     },
     handleEditStart() {
       this.isEditing = true
