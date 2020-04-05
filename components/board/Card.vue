@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @clickaway="handleEditEnd">
     <Moveable
       v-bind="moveable"
       @drag="handleDrag"
@@ -21,7 +21,6 @@
             ref="inputText"
             @click="handleInputClick"
             @keydown.enter="handleEditEnd"
-            @blur="handleEditEnd"
             :value="value.text"
           />
         </div>
@@ -36,7 +35,7 @@
     <transition name="fade-fast">
       <div class="Context-menu">
         <div v-show="isEditing" class="context Context-menuInner">
-          <color-picker v-model="color" />
+          <color-picker :value="value.color" />
         </div>
       </div>
     </transition>
@@ -44,6 +43,8 @@
 </template>
 
 <script>
+// https://www.npmjs.com/package/vue-clickaway
+import { mixin as clickaway } from 'vue-clickaway'
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
 import ColorPicker from '~/components/board/ColorPicker.vue'
@@ -55,6 +56,7 @@ export default {
     ColorPicker,
     Icon
   },
+  mixins: [clickaway],
   props: {
     value: {
       type: Object,

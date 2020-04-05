@@ -40,12 +40,12 @@ export const actions = {
     commit('updateCardContent', payload)
   },
 
-  updateCardPosition({ commit, dispatch }, payload) {
-    commit('updateCardPosition', payload)
-  },
-
   updateCardColor({ commit, dispatch }, payload) {
     commit('updateCardColor', payload)
+  },
+
+  updateCardPosition({ commit, dispatch }, payload) {
+    commit('updateCardPosition', payload)
   },
 
   deleteCard({ commit, dispatch }, payload) {
