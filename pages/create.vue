@@ -10,7 +10,11 @@
         <p class="h2 lead">
           👋 Start right now, but first of all: What's your name?
         </p>
-        <input v-model="userName" placeholder="Name" />
+        <input
+          v-model="name"
+          @change="(e) => updateName(e.target.value)"
+          placeholder="NAME"
+        />
         <button @click="step++" class="button button--primary">Submit</button>
       </page-section>
     </transition>
@@ -43,20 +47,22 @@
             Administrators host and moderate the session.
           </p>
           <link-container
-            link="https://signers-koffer.github.io/koffer/board/admin"
+            :link="
+              `https://signers-koffer.github.io/koffer/board/${uuid}/${admin}`
+            "
           />
         </div>
 
         <div>
           <h2 class="h5 bold">Send link to invite participants</h2>
           <link-container
-            link="https://signers-koffer.github.io/koffer/board/user"
+            :link="`https://signers-koffer.github.io/koffer/board/${uuid}`"
           />
         </div>
 
         <div>
           <nuxt-link
-            to="/board"
+            :to="`/board/${uuid}`"
             tag="button"
             class="button button--primary done-button"
           >
@@ -69,9 +75,13 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+import ShortId from '~/util/shortId'
 import ProgressBar from '~/components/ProgressBar.vue'
 import PageSection from '~/components/PageSection.vue'
 import LinkContainer from '~/components/LinkContainer.vue'
+
+const { mapState, mapActions } = createNamespacedHelpers('me')
 
 export default {
   components: { ProgressBar, PageSection, LinkContainer },
@@ -84,12 +94,15 @@ export default {
   data() {
     return {
       step: 1,
-      userName: '',
-      sessionName: ''
+      sessionName: '',
+      uuid: ShortId(),
+      admin: ShortId()
     }
   },
 
   computed: {
+    ...mapState(['name']),
+
     progress() {
       const maxSteps = 3
 
@@ -98,10 +111,12 @@ export default {
   },
 
   methods: {
+    ...mapActions(['updateName']),
     persistSettings() {
-      this.$store.dispatch('session/setSettings', {
-        userName: this.userName,
-        sessionName: this.sessionName
+      this.$store.dispatch('sessions/addSession', {
+        uuid: this.uuid,
+        name: this.sessionName,
+        admin: this.admin
       })
 
       this.step++

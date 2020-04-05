@@ -23,10 +23,14 @@
         :key="index"
         :is-active="activeTool === navItem.item"
         :icon="navItem.item"
+        :class="{ 'is-disabled': navItem.disabled }"
+        v-tooltip.right="{ content: navItem.name, class: 'tooltip' }"
         @click="
           () => {
-            activeTool = navItem.item
-            navItem.handler()
+            if (!navItem.disabled) {
+              activeTool = navItem.item
+              navItem.handler()
+            }
           }
         "
       />
@@ -49,6 +53,7 @@ import { mapState } from 'vuex'
 import Board from '~/components/board/Board.vue'
 import NavItem from '~/components/board/NavItem.vue'
 import StopWatch from '~/components/board/StopWatch.vue'
+import { socket } from '~/util/socketio'
 
 export default {
   components: { NavItem, Board, StopWatch },
@@ -58,26 +63,72 @@ export default {
     mode: 'out-in'
   },
 
+  created() {
+    const id = this.$router.currentRoute.params.id
+    socket.emit('session:join', id)
+    console.log('joindedboard: ', id)
+  },
+
   data() {
     return {
       activeTool: 'select',
       hasStopwatch: false,
       color: null,
       navItems: [
-        { item: 'select', handler: () => {} },
-        { item: 'artboard', handler: () => {} },
-        { item: 'sticky-note', handler: this.addSticky },
-        { item: 'text', handler: () => {} },
-        { item: 'shape', handler: this.addShape },
-        { item: 'draw', handler: () => {} },
-        { item: 'eraser', handler: () => {} },
-        { item: 'stopwatch', handler: this.toggleStopwatch }
+        {
+          item: 'select',
+          name: 'Select something',
+          disabled: false,
+          handler: () => {}
+        },
+        {
+          item: 'sticky-note',
+          name: 'Add a sticky note',
+          disabled: false,
+          handler: this.addSticky
+        },
+        {
+          item: 'text',
+          name: 'Add a text',
+          disabled: false,
+          handler: () => {}
+        },
+        {
+          item: 'shape',
+          name: 'Add a shape',
+          disabled: false,
+          handler: this.addShape
+        },
+        {
+          item: 'stopwatch',
+          name: 'Stopwatch',
+          disabled: false,
+          handler: this.toggleStopwatch
+        },
+        {
+          item: 'artboard',
+          name: 'Coming soon',
+          disabled: true,
+          handler: () => {}
+        },
+        {
+          item: 'draw',
+          name: 'Coming soon',
+          disabled: true,
+          handler: () => {}
+        },
+        {
+          item: 'eraser',
+          name: 'Coming soon',
+          disabled: true,
+          handler: () => {}
+        }
       ]
     }
   },
 
   computed: {
-    ...mapState('session', ['sessionName'])
+    ...mapState('sessions', ['sessionName'])
   },
 
   methods: {
@@ -143,8 +194,17 @@ export default {
     justify-content: center;
   }
 
-  .nav-item:first-child {
-    margin-top: 40px;
+  .nav-item {
+    &:first-child {
+      margin-top: 40px;
+    }
+
+    &.is-disabled {
+      opacity: 0.2;
+      .icon {
+        cursor: wait;
+      }
+    }
   }
 }
 

@@ -15,6 +15,20 @@
         The results of your work will be easily archived, converted into
         different file types and sent to your colleagues.
       </p>
+
+      <ul class="links">
+        <li>
+          <a href="https://github.com/signers-koffer" class="link">GitHub</a>
+        </li>
+        <li>
+          <a href="https://www.versusvirus.ch/" class="link">versusvirus</a>
+        </li>
+        <li>
+          <nuxt-link to="/license" tag="a" class="link">
+            License
+          </nuxt-link>
+        </li>
+      </ul>
     </div>
 
     <div class="video-container">
@@ -90,6 +104,18 @@
       height: 100%;
       width: 100%;
       object-position: 50% 50%;
+    }
+  }
+
+  .links {
+    list-style-type: none;
+    display: flex;
+    margin-left: 0;
+    padding: 0;
+    margin-top: 80px;
+
+    li:not(:last-child) {
+      margin-right: 40px;
     }
   }
 }
