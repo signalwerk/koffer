@@ -10,6 +10,7 @@ const io = require('socket.io')(http)
 
 const mongoose = require('mongoose')
 const Card = require('./Card')
+const Session = require('./Session')
 
 require('dotenv').config()
 
@@ -22,12 +23,14 @@ mongoose.connect(uri, {
 })
 
 io.on('connection', (socket) => {
-  const sessionID = 'dev-session-id'
+  // const sessionID = 'dev-session-id'
 
-  socket.emit('session:init', { session: sessionID })
+  // socket.emit('session:init', { session: sessionID })
+  socket.emit('session:init')
 
+  // initial state cards
   socket.on('cards:init', (data) => {
-    Card.find({ deleted: false })
+    Card.find({ deleted: false, session: data.session })
       .select({ session: 0, _id: 0, updatedAt: 0, createdAt: 0, __v: 0 })
       .sort({ createdAt: -1 })
       .limit(100000)
@@ -35,6 +38,19 @@ io.on('connection', (socket) => {
         if (err) return console.error(err)
         // Send the last mutations to the user.
         socket.emit('cards:restore', mutations)
+      })
+  })
+
+  // initial state session
+  socket.on('sessions:init', (data) => {
+    Session.find({ deleted: false, uuid: data.uuid })
+      .select({ session: 0, _id: 0, updatedAt: 0, createdAt: 0, __v: 0 })
+      .sort({ createdAt: -1 })
+      .limit(1)
+      .exec((err, mutations) => {
+        if (err) return console.error(err)
+        // Send the last mutations to the user.
+        socket.emit('sessions:restore', mutations)
       })
   })
 
