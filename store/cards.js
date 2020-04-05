@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 
+export const COLORS = ['#000000', '#100000']
+
 export const state = () => ({
   cards: {}
 })
@@ -15,6 +17,7 @@ export const actions = {
       x: 0,
       y: 0,
       text: '',
+      color: 0,
       ...payload
     }
 
@@ -31,6 +34,10 @@ export const actions = {
 
   updateCardPosition({ commit, dispatch }, payload) {
     commit('updateCardPosition', payload)
+  },
+
+  updateCardColor({ commit, dispatch }, payload) {
+    commit('updateCardColor', payload)
   },
 
   deleteCard({ commit, dispatch }, payload) {
@@ -79,6 +86,10 @@ export const mutations = {
     state.cards[uuid].x = x
     state.cards[uuid].y = y
     state.cards[uuid].transform = transform
+  },
+
+  updateCardColor(state, { uuid, color }) {
+    state.cards[uuid].color = color
   },
 
   /**

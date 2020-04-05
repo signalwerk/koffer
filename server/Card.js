@@ -6,6 +6,7 @@ const card = new mongoose.Schema(
     deleted: Boolean,
     session: String,
     text: String,
+    color: Number,
     x: Number,
     y: Number
   },
