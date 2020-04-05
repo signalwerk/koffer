@@ -15,7 +15,7 @@
         <path v-else-if="currentShape === 'triangle'" d="M4 96 H96 L50 4Z" />
         <path
           v-else-if="currentShape === 'rectangle'"
-          d="M2 2 h96 v96 h-96 v-96"
+          d="M2 2 h96 v96 h-96 v-96z"
         />
       </svg>
     </Moveable>
