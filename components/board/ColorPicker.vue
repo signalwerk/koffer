@@ -5,8 +5,8 @@
         v-for="(color, index) in colors"
         :style="`background-color: ${color}; border-color: ${color}`"
         :key="index"
-        @click="$emit('input', color)"
-        :class="{ 'is-active': value === color }"
+        @click="$emit('input', index)"
+        :class="{ 'is-active': value === index }"
         class="color"
       />
     </ul>
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { COLORS } from '~/store/cards'
+
 export default {
   props: {
     value: {
@@ -24,15 +26,7 @@ export default {
 
   data() {
     return {
-      colors: [
-        '#fcf4a9',
-        '#efd351',
-        '#f5b57a',
-        '#e5acc8',
-        '#e7909a',
-        '#77ddcc',
-        '#d3e187'
-      ]
+      colors: COLORS
     }
   }
 }

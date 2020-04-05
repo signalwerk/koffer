@@ -15,7 +15,7 @@
           {{ value.text }}
         </div>
       </div>
-      <label v-else>
+      <div v-else class="Card--Input">
         <input
           ref="inputText"
           @click="handleInputClick"
@@ -23,7 +23,7 @@
           @blur="handleEditEnd"
           :value="value.text"
         />
-      </label>
+      </div>
     </div>
     <details v-if="false">
       <summary>debug info</summary>
@@ -138,13 +138,15 @@ $colors: (
       background-color: $color;
     }
   }
-  &--Text {
-    text-align: center;
+
+  &--Text,
+  &--Input {
     // outline: 1px dashed red;
-    flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-grow: 1;
+    text-align: center;
   }
   &.is-editing {
     z-index: 1;
