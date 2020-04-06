@@ -4,6 +4,9 @@
 
 Mockup for creative collaboration tool in the context of the [versusvirus.ch](https://www.versusvirus.ch/) Hackathon
 
+
+* [About the Project](https://devpost.com/software/place-platform-and-coworking-experience)
+
 ## Build Setup
 
 ``` bash
