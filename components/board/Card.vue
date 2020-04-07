@@ -74,9 +74,9 @@ export default {
   },
   methods: {
     handleDragStart() {
-      this.isDraging = true
       this.x = this.value.x
       this.y = this.value.y
+      this.isDraging = true
     },
     handleDragEnd() {
       this.isDraging = true
