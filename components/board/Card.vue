@@ -34,13 +34,9 @@
         </code>
       </details>
     </Moveable>
-    <transition name="fade-fast">
-      <div class="Context-menu">
-        <div v-show="isEditing" class="context Context-menuInner">
-          <color-picker :value="value.color" @input="handleColorChange" />
-        </div>
-      </div>
-    </transition>
+    <context-menu v-bind:visible="isEditing">
+      <color-picker :value="value.color" @input="handleColorChange" />
+    </context-menu>
   </div>
 </template>
 
@@ -50,6 +46,7 @@ import { mixin as clickaway } from 'vue-clickaway'
 
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
+import ContextMenu from './ContextMenu.vue'
 import { COLORS } from '~/store/cards'
 import ColorPicker from '~/components/board/ColorPicker.vue'
 import Icon from '~/components/Icon'
@@ -58,6 +55,7 @@ export default {
   components: {
     Moveable,
     ColorPicker,
+    ContextMenu,
     Icon
   },
   mixins: [clickaway],
@@ -213,15 +211,6 @@ button {
   display: inline-block;
   opacity: 0;
   transition: opacity 300ms ease-in-out;
-}
-
-.Context-menu {
-  transform: translate(-50vw, -50vh);
-}
-.Context-menuInner {
-  left: 50%;
-  top: 24px;
-  transform: translateX(-50%);
 }
 </style>
 
