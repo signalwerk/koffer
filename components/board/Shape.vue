@@ -43,10 +43,9 @@ import { mixin as clickaway } from 'vue-clickaway'
 import Moveable from 'vue-moveable'
 import { SHAPES } from '~/store/shapes'
 import ShapePicker from '~/components/board/ShapePicker.vue'
-import Icon from '~/components/Icon'
 
 export default {
-  components: { Moveable, ShapePicker, Icon },
+  components: { Moveable, ShapePicker },
   mixins: [clickaway],
   props: {
     value: {

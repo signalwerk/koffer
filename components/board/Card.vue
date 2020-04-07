@@ -36,23 +36,13 @@
 <script>
 // https://www.npmjs.com/package/vue-clickaway
 import { mixin as clickaway } from 'vue-clickaway'
-
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
-import ContextMenu from './ContextMenu/ContextMenu.vue'
-import DeleteButton from './ContextMenu/DeleteButton.vue'
-import ColorPicker from './ContextMenu/ColorPicker.vue'
-import DebugInfo from '~/components/helpers/debug-info.vue'
+
 import { COLORS } from '~/store/cards'
 
 export default {
-  components: {
-    Moveable,
-    ColorPicker,
-    ContextMenu,
-    DebugInfo,
-    DeleteButton
-  },
+  components: { Moveable },
   mixins: [clickaway],
   props: {
     value: {
