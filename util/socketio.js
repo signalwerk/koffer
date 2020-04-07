@@ -22,6 +22,7 @@ const generalRestore = ({ name, actions, data, store }) => {
   }
 }
 const generalPush = ({ name, actions, data, store }) => {
+  console.log(`GET – ${name}`, data)
   if (actions && actions[name] && actions[name].update) {
     store.commit(actions[name].update, data)
   }
@@ -121,7 +122,7 @@ export default function liveSyncPlugin(conf) {
         // do we have to sync this mutation?
         if (!mutation.startsWith('nosync_')) {
           // eslint-disable-next-line no-console
-          console.log(`--- mutation ${module}`, _mutation.payload)
+          console.log(`SEND – ${module}`, _mutation.payload)
           throttledEmit(`${module}:mutation`, {
             // session: sessionID,
             ..._mutation.payload
