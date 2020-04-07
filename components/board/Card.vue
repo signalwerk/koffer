@@ -138,7 +138,6 @@ export default {
 
 <style lang="scss" scoped>
 $size: 250px;
-$button-size: 22px;
 
 * {
   box-sizing: border-box;
@@ -187,18 +186,6 @@ input {
   text-transform: inherit;
   background-color: transparent;
   border-color: black;
-}
-
-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  appearance: none;
-  background: transparent;
-  border: none;
-  padding: 5px;
-  width: $button-size;
-  height: $button-size;
 }
 
 .icon,

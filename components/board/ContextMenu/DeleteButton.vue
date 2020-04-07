@@ -1,15 +1,11 @@
 <template>
-  <div @click="callback" class="button-like">
+  <button @click="callback" class="button-like">
     <icon icon="close" size="small" />
-  </div>
+  </button>
 </template>
 
 <script>
-import Icon from '~/components/Icon'
 export default {
-  components: {
-    Icon
-  },
   props: {
     callback: {
       type: Function,
@@ -21,4 +17,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+button {
+  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  height: auto;
+  width: auto;
+  background-color: white;
+}
+</style>
