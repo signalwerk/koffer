@@ -10,9 +10,6 @@
       class="Card"
     >
       <div :style="cssProps" class="Card--inner">
-        <button @click="deleteCard">
-          <icon icon="close" size="small" />
-        </button>
         <div v-show="!isEditing" @click="handleEditStart" class="Card--Text">
           <div class="Card--TextInner">
             {{ value.text }}
@@ -27,15 +24,11 @@
           />
         </div>
       </div>
-      <details v-if="false">
-        <summary>debug info</summary>
-        <code>
-          <pre>{{ JSON.stringify(value, null, 2) }}</pre>
-        </code>
-      </details>
+      <debug-info :visible="false" :dump="value" />
     </Moveable>
-    <context-menu v-bind:visible="isEditing">
+    <context-menu :visible="isEditing">
       <color-picker :value="value.color" @input="handleColorChange" />
+      <delete-button :callback="deleteCard" class="delete-button" />
     </context-menu>
   </div>
 </template>
@@ -46,17 +39,19 @@ import { mixin as clickaway } from 'vue-clickaway'
 
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
-import ContextMenu from './ContextMenu.vue'
+import ContextMenu from './ContextMenu/ContextMenu.vue'
+import DeleteButton from './ContextMenu/DeleteButton.vue'
+import ColorPicker from './ContextMenu/ColorPicker.vue'
+import DebugInfo from '~/components/helpers/debug-info.vue'
 import { COLORS } from '~/store/cards'
-import ColorPicker from '~/components/board/ColorPicker.vue'
-import Icon from '~/components/Icon'
 
 export default {
   components: {
     Moveable,
     ColorPicker,
     ContextMenu,
-    Icon
+    DebugInfo,
+    DeleteButton
   },
   mixins: [clickaway],
   props: {
@@ -211,6 +206,10 @@ button {
   display: inline-block;
   opacity: 0;
   transition: opacity 300ms ease-in-out;
+}
+
+.delete-button {
+  margin-left: 20px;
 }
 </style>
 
