@@ -28,7 +28,7 @@
     </Moveable>
     <context-menu :visible="isEditing">
       <color-picker :value="value.color" @input="handleColorChange" />
-      <delete-button :callback="deleteCard" class="delete-button" />
+      <delete-button :callback="deleteCard" />
     </context-menu>
   </div>
 </template>
@@ -183,10 +183,6 @@ input {
   display: inline-block;
   opacity: 0;
   transition: opacity 300ms ease-in-out;
-}
-
-.delete-button {
-  margin-left: 20px;
 }
 </style>
 

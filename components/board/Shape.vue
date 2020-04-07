@@ -9,9 +9,6 @@
       :style="transform"
       class="Shape"
     >
-      <button @click="deleteShape">
-        <icon icon="close" size="small" />
-      </button>
       <svg
         @click="handleEditStart"
         xmlns="http://www.w3.org/2000/svg"
@@ -24,28 +21,25 @@
           d="M2 2 h96 v96 h-96 v-96z"
         />
       </svg>
+      <debug-info :visible="true" :dump="value" />
     </Moveable>
-    <transition name="fade-fast">
-      <div class="Context-menu">
-        <div v-show="isEditing" class="context Context-menuInner">
-          <shape-picker :value="value.shape" @input="handleUpdateShape" />
-        </div>
-      </div>
-    </transition>
+    <context-menu :visible="isEditing">
+      <shape-picker :value="value.shape" @input="handleUpdateShape" />
+      <delete-button :callback="deleteShape" />
+    </context-menu>
   </div>
 </template>
 
 <script>
 // https://www.npmjs.com/package/vue-clickaway
 import { mixin as clickaway } from 'vue-clickaway'
-
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
+
 import { SHAPES } from '~/store/shapes'
-import ShapePicker from '~/components/board/ShapePicker.vue'
 
 export default {
-  components: { Moveable, ShapePicker },
+  components: { Moveable },
   mixins: [clickaway],
   props: {
     value: {
@@ -95,11 +89,6 @@ export default {
     },
     handleEditEnd() {
       this.$data.isEditing = false
-      // this.$data.shape = this.currentShape
-      // this.$store.dispatch('shapes/updateShape', {
-      //   uuid: this.value.uuid,
-      //   shape: this.currentShape
-      // })
     },
     handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
       const x = this.x + delta[0]
@@ -147,21 +136,9 @@ $button-size: 22px;
   rect,
   path,
   circle {
-    fill: yellow;
     stroke: black;
     stroke-width: 3;
     fill: transparent;
-  }
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    appearance: none;
-    background: transparent;
-    border: none;
-    padding: 5px;
-    width: $button-size;
-    height: $button-size;
   }
 
   &:hover .icon,
@@ -177,14 +154,5 @@ $button-size: 22px;
       transition: opacity 300ms ease-in-out;
     }
   }
-}
-
-.Context-menu {
-  transform: translate(-50vw, -50vh);
-}
-.Context-menuInner {
-  left: 50%;
-  top: 24px;
-  transform: translateX(-50%);
 }
 </style>

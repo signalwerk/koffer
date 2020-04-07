@@ -19,13 +19,13 @@ export default {
 
 <style lang="scss" scoped>
 button {
-  display: block;
   display: flex;
   align-items: center;
   justify-content: center;
-  appearance: none;
+  margin-left: 10px;
   height: auto;
   width: auto;
+  appearance: none;
   background-color: white;
 }
 </style>
