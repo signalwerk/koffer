@@ -1,5 +1,5 @@
 <template>
-  <details v-show="visible">
+  <details v-if="visible">
     <summary>debug info</summary>
     <code>
       <pre>{{ JSON.stringify(dump, null, 2) }}</pre>

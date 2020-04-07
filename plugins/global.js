@@ -7,7 +7,7 @@ import ColorPicker from '~/components/board/ContextMenu/ColorPicker.vue'
 import ShapePicker from '~/components/board/ContextMenu/ShapePicker.vue'
 
 Vue.component('icon', Icon)
-Vue.component('debig-info', DebugInfo)
+Vue.component('debug-info', DebugInfo)
 Vue.component('context-menu', ContextMenu)
 Vue.component('delete-button', DeleteButton)
 Vue.component('color-picker', ColorPicker)

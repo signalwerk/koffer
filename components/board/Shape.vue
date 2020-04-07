@@ -21,7 +21,7 @@
           d="M2 2 h96 v96 h-96 v-96z"
         />
       </svg>
-      <debug-info :visible="true" :dump="value" />
+      <debug-info :visible="false" :dump="value" />
     </Moveable>
     <context-menu :visible="isEditing">
       <shape-picker :value="value.shape" @input="handleUpdateShape" />
