@@ -9,10 +9,12 @@ const io = require('socket.io')(http)
 /* eslint-enable */
 
 const mongoose = require('mongoose')
-const Card = require('./Card')
-const Session = require('./Session')
-const Textarea = require('./Textarea')
-const Shape = require('./Shape')
+
+// models
+const Card = require('./schema/card')
+const Session = require('./schema/session')
+const Textarea = require('./schema/textarea')
+const Shape = require('./schema/shape')
 
 require('dotenv').config()
 
