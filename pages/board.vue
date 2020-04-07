@@ -20,13 +20,13 @@
       </div>
     </header>
 
-    <aside class="nav">
+    <aside class="nav" :class="{ 'stopwatch-running': isRunning.isRunning }">
       <nav-item
         v-for="(navItem, index) in navItems"
         :key="index"
         :is-active="activeTool === navItem.item"
         :icon="navItem.item"
-        :class="{ 'is-disabled': navItem.disabled }"
+        :class="{ 'is-disabled': navItem.disabled, ...navItem.classes }"
         v-tooltip.right="{ content: navItem.name, class: 'tooltip' }"
         @click="
           () => {
@@ -59,6 +59,7 @@ import StopWatch from '~/components/board/StopWatch.vue'
 import { socket } from '~/util/socketio'
 
 const { mapState: mapSessionsState } = createNamespacedHelpers('sessions')
+const { mapState: mapStopwatchState } = createNamespacedHelpers('stopwatch')
 
 export default {
   components: { NavItem, Board, StopWatch },
@@ -66,13 +67,6 @@ export default {
   transition: {
     name: 'slide-fade',
     mode: 'out-in'
-  },
-
-  created() {
-    console.log('router', this.$router.currentRoute)
-    const id = this.$router.currentRoute.query.id
-    socket.emit('session:join', id)
-    console.log('joindedboard: ', id)
   },
 
   data() {
@@ -85,48 +79,56 @@ export default {
           item: 'select',
           name: 'Select something',
           disabled: false,
+          classes: {},
           handler: () => {}
         },
         {
           item: 'sticky-note',
           name: 'Add a sticky note',
           disabled: false,
+          classes: {},
           handler: this.addSticky
         },
         {
           item: 'text',
           name: 'Add a text',
           disabled: false,
+          classes: {},
           handler: this.addTextarea
         },
         {
           item: 'shape',
           name: 'Add a shape',
           disabled: false,
+          classes: {},
           handler: this.addShape
         },
         {
           item: 'stopwatch',
           name: 'Stopwatch',
           disabled: false,
+          classes: { 'stopwatch-icon': true },
           handler: this.toggleStopwatch
         },
         {
           item: 'artboard',
           name: 'Coming soon',
           disabled: true,
+          classes: {},
           handler: () => {}
         },
         {
           item: 'draw',
           name: 'Coming soon',
           disabled: true,
+          classes: {},
           handler: () => {}
         },
         {
           item: 'eraser',
           name: 'Coming soon',
           disabled: true,
+          classes: {},
           handler: () => {}
         }
       ]
@@ -134,7 +136,18 @@ export default {
   },
 
   computed: {
-    ...mapSessionsState(['sessions'])
+    ...mapSessionsState(['sessions']),
+    ...mapStopwatchState(['isRunning'])
+  },
+
+  created() {
+    // eslint-disable-next-line no-console
+    console.log('router', this.$router.currentRoute)
+    const id = this.$router.currentRoute.query.id
+    socket.emit('session:join', id)
+
+    // eslint-disable-next-line no-console
+    console.log('joindedboard: ', id)
   },
 
   methods: {
@@ -221,5 +234,9 @@ export default {
 .board {
   overflow: hidden;
   grid-area: main;
+}
+
+.stopwatch-running .stopwatch-icon {
+  animation: pulse 1s infinite;
 }
 </style>

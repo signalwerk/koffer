@@ -252,6 +252,27 @@ io.on('connection', (socket) => {
     // socket.emit('sessions:push', data)
     // socket.broadcast.emit('cards:push', data)
   })
+
+  // Emit the stopwatch start
+  socket.on('stopwatch:mutation', (data) => {
+    const session = getSession(socket)
+
+    if (data.isRunning) {
+      // Notify all other users about the stopwatch start
+      io.sockets.in(`user_${session}`).emit('stopwatch:start')
+    } else {
+      // Notify all other users about the stopwatch stop
+      io.sockets.in(`user_${session}`).emit('stopwatch:stop')
+    }
+  })
+
+  // Emit the stopwatch reset
+  socket.on('stopwatch:reset', () => {
+    const session = getSession(socket)
+
+    // Notify all other users about the stopwatch reset
+    io.sockets.in(`user_${session}`).emit('stopwatch:reset')
+  })
 })
 
 http.listen(port, () => {

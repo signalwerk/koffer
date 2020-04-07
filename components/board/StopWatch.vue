@@ -9,9 +9,12 @@
     </div>
 
     <button
-      v-text="isRunning ? 'Stop' : 'Start'"
+      v-text="isRunning.isRunning ? 'Stop' : 'Start'"
       @click="toggle"
-      :class="{ 'button--error': isRunning, 'button--primary': !isRunning }"
+      :class="{
+        'button--error': isRunning.isRunning,
+        'button--primary': !isRunning.isRunning
+      }"
       class="button"
     />
 
@@ -22,7 +25,10 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import Icon from '~/components/Icon'
+
+const { mapState: mapStopWatch } = createNamespacedHelpers('stopwatch')
 
 export default {
   components: { Icon },
@@ -30,12 +36,13 @@ export default {
   data() {
     return {
       timeElapsed: 0,
-      interval: null,
-      isRunning: false
+      interval: null
     }
   },
 
   computed: {
+    ...mapStopWatch(['isRunning']),
+
     timer() {
       const hours = String(
         Math.floor(this.timeElapsed / 1000 / 60 / 60)
@@ -52,25 +59,39 @@ export default {
     }
   },
 
+  watch: {
+    isRunning: {
+      handler(newValue) {
+        if (newValue.isRunning) {
+          if (!this.interval) {
+            this.interval = setInterval(() => {
+              this.timeElapsed += 500
+            }, 500)
+          }
+        } else {
+          clearInterval(this.interval)
+          this.interval = null
+        }
+      },
+      deep: true
+    }
+  },
+
   methods: {
     start() {
-      this.interval = setInterval(() => {
-        this.timeElapsed += 500
-      }, 500)
+      this.$store.dispatch('stopwatch/start')
     },
 
     stop() {
-      clearInterval(this.interval)
+      this.$store.dispatch('stopwatch/stop')
     },
 
     toggle() {
-      if (this.isRunning) {
+      if (this.isRunning.isRunning) {
         this.stop()
       } else {
         this.start()
       }
-
-      this.isRunning = !this.isRunning
     },
 
     reset() {

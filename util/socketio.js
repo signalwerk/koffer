@@ -46,25 +46,30 @@ export default function liveSyncPlugin(conf) {
     })
 
     socket.on('cards:restore', (data) => {
+      // eslint-disable-next-line no-console
       console.log('--->>> card restore', data)
 
       generalRestore({ name: 'cards', actions, data, store })
     })
 
     socket.on('textareas:restore', (data) => {
+      // eslint-disable-next-line no-console
       console.log('--->>> textarea restore', data)
 
       generalRestore({ name: 'textareas', actions, data, store })
     })
 
     socket.on('shapes:restore', (data) => {
+      // eslint-disable-next-line no-console
       console.log('--->>> shape restore', data)
 
       generalRestore({ name: 'shapes', actions, data, store })
     })
 
     socket.on('sessions:restore', (data) => {
+      // eslint-disable-next-line no-console
       console.log('got sessions:restore', data)
+
       generalRestore({ name: 'sessions', actions, data, store })
     })
 
@@ -84,6 +89,28 @@ export default function liveSyncPlugin(conf) {
       generalPush({ name: 'sessions', actions, data, store })
     })
 
+    socket.on('stopwatch:start', () => {
+      generalPush({
+        name: 'stopwatch',
+        actions,
+        data: {
+          isRunning: true
+        },
+        store
+      })
+    })
+
+    socket.on('stopwatch:stop', () => {
+      generalPush({
+        name: 'stopwatch',
+        actions,
+        data: {
+          isRunning: false
+        },
+        store
+      })
+    })
+
     // The mutation comes in the format of `{ type, payload }`.
     store.subscribe((_mutation) => {
       // figure out what module and what mutation
@@ -93,6 +120,7 @@ export default function liveSyncPlugin(conf) {
       if (modules.includes(module)) {
         // do we have to sync this mutation?
         if (!mutation.startsWith('nosync_')) {
+          // eslint-disable-next-line no-console
           console.log(`--- mutation ${module}`, _mutation.payload)
           throttledEmit(`${module}:mutation`, {
             // session: sessionID,
