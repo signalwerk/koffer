@@ -51,6 +51,7 @@ export default {
     x: 0,
     y: 0,
     isEditing: false,
+    isDraging: false,
     shapeIndex: 0,
     moveable: {
       draggable: true,
@@ -77,7 +78,7 @@ export default {
       this.isDraging = true
     },
     handleDragEnd() {
-      this.isDraging = true
+      this.isDraging = false
     },
     handleUpdateShape(shape) {
       const { uuid } = this.value

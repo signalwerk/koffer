@@ -58,6 +58,7 @@ export default {
     x: 0,
     y: 0,
     isEditing: false,
+    isDraging: false,
     moveable: {
       draggable: true,
       throttleDrag: 0
@@ -80,7 +81,7 @@ export default {
       this.isDraging = true
     },
     handleDragEnd() {
-      this.isDraging = true
+      this.isDraging = false
     },
     handleColorChange(color) {
       const { uuid } = this.value
