@@ -7,7 +7,7 @@ const vuexLocal = new VuexPersistence({
 })
 
 const sync = liveSyncPlugin({
-  modules: ['cards', 'shapes', 'textareas', 'sessions', 'stopwatch'], // only sync these modules
+  modules: ['cards', 'shapes', 'textareas', 'sessions', 'timers'], // only sync these modules
 
   // when we get a restore or update from the server
   actions: {
@@ -27,8 +27,9 @@ const sync = liveSyncPlugin({
       restore: 'sessions/nosync_restore',
       update: 'sessions/nosync_updateSession'
     },
-    stopwatch: {
-      update: 'stopwatch/nosync_toggle'
+    timers: {
+      restore: 'timers/nosync_restore',
+      update: 'timers/nosync_updateTimer'
     }
   }
 })

@@ -54,7 +54,7 @@ export const mutations = {
   },
 
   nosync_updateTextarea(state, textarea) {
-    // console.log('nosync_updateTextarea', textarea)
+    console.log('nosync_updateTextarea', textarea)
 
     if (textarea.deleted) {
       Vue.delete(state.textareas, textarea.uuid)

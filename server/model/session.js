@@ -10,5 +10,5 @@ const find = {
     uuid: session
   })
 }
-const select = { }
+const select = { updatedAt: 0 }
 module.exports = { schema, find, select }

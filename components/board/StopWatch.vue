@@ -4,16 +4,16 @@
       <icon icon="stopwatch" />
 
       <span class="timer-value">
-        {{ timer }}
+        {{ timerStr }}
       </span>
     </div>
 
     <button
-      v-text="isRunning.isRunning ? 'Stop' : 'Start'"
+      v-text="isRunning ? 'Stop' : 'Start'"
       @click="toggle"
       :class="{
-        'button--error': isRunning.isRunning,
-        'button--primary': !isRunning.isRunning
+        'button--error': isRunning,
+        'button--primary': !isRunning
       }"
       class="button"
     />
@@ -27,42 +27,86 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import Icon from '~/components/Icon'
+import { DEFAULT_TIMER } from '~/store/timers'
 
-const { mapState: mapStopWatch } = createNamespacedHelpers('stopwatch')
+const { mapState } = createNamespacedHelpers('timers')
 
+const formatTime = (timestamp) => {
+  const timestampInSec = timestamp / 1000
+  const hours = String(Math.floor(timestampInSec / 60 / 60)).padStart(2, '0')
+  const minutes = String(Math.floor(timestampInSec / 60)).padStart(2, '0')
+  const seconds = String(Math.floor(timestampInSec % 60)).padStart(2, '0')
+
+  return `${hours}:${minutes}:${seconds}`
+}
 export default {
   components: { Icon },
 
   data() {
-    return {
-      timeElapsed: 0,
-      interval: null
-    }
+    return { timeElapsed: 0, interval: null }
   },
 
   computed: {
-    ...mapStopWatch(['isRunning']),
+    ...mapState(['timers']),
 
+    isRunning() {
+      return this.timers[DEFAULT_TIMER] && this.timers[DEFAULT_TIMER].mode === 1
+    },
+    debug() {
+      return {
+        'this.isRunning': this.isRunning
+        // 'this.clientNowOnUpdate': this.clientNowOnUpdate
+      }
+    },
+    timerStr() {
+      return formatTime(this.timer)
+    },
     timer() {
-      const hours = String(
-        Math.floor(this.timeElapsed / 1000 / 60 / 60)
-      ).padStart(2, '0')
-      const minutes = String(Math.floor(this.timeElapsed / 1000 / 60)).padStart(
-        2,
-        '0'
-      )
-      const seconds = String(
-        Math.floor((this.timeElapsed / 1000) % 60)
-      ).padStart(2, '0')
+      console.log('-- timer', this.timers[DEFAULT_TIMER])
 
-      return `${hours}:${minutes}:${seconds}`
+      // no time from server yet
+      if (!this.timers[DEFAULT_TIMER]) {
+        return 0
+      }
+
+      // timer stands still
+      if (this.timers[DEFAULT_TIMER].mode === 0) {
+        return this.timers[DEFAULT_TIMER].value || 0
+      }
+
+      const sinceUpdate = Date.now() - this.timers[DEFAULT_TIMER].__meta.gotAt
+
+      // const timeOffset =
+      //   this.timers[DEFAULT_TIMER].__meta.sentAt -
+      //   this.timers[DEFAULT_TIMER].__meta.gotAt
+
+      // console.log({
+      //   sentAt: this.timers[DEFAULT_TIMER].__meta.sentAt,
+      //   updatedAt: this.timers[DEFAULT_TIMER].updatedAt,
+      //   diff:
+      //     this.timers[DEFAULT_TIMER].__meta.sentAt -
+      //     this.timers[DEFAULT_TIMER].updatedAt,
+      //   clientNowOnUpdate: this.clientNowOnUpdate
+      // })
+
+      console.log({
+        sinceUpdate,
+        timeElapsed: this.timeElapsed
+      })
+
+      const newTimer = sinceUpdate + this.timers[DEFAULT_TIMER].value
+
+      return newTimer
     }
   },
 
   watch: {
-    isRunning: {
+    timer: {
       handler(newValue) {
-        if (newValue.isRunning) {
+        if (
+          this.timers[DEFAULT_TIMER] &&
+          this.timers[DEFAULT_TIMER].mode === 1
+        ) {
           if (!this.interval) {
             this.interval = setInterval(() => {
               this.timeElapsed += 500
@@ -79,22 +123,39 @@ export default {
 
   methods: {
     start() {
-      this.$store.dispatch('stopwatch/start')
+      this.$store.dispatch('timers/updateMode', {
+        uuid: DEFAULT_TIMER,
+        mode: 1
+      })
     },
 
     stop() {
-      this.$store.dispatch('stopwatch/stop')
+      console.log('----- method run stop')
+
+      this.$store.dispatch('timers/updateMode', {
+        uuid: DEFAULT_TIMER,
+        mode: 0,
+        value: this.timer
+      })
+      this.timeElapsed = 0
     },
 
     toggle() {
-      if (this.isRunning.isRunning) {
+      if (this.timers[DEFAULT_TIMER] && this.timers[DEFAULT_TIMER].mode === 1) {
+        console.log('----- toggle stop')
         this.stop()
       } else {
+        console.log('----- toggle start')
         this.start()
       }
     },
 
     reset() {
+      this.$store.dispatch('timers/updateMode', {
+        uuid: DEFAULT_TIMER,
+        mode: 0,
+        value: 0
+      })
       this.timeElapsed = 0
     }
   }

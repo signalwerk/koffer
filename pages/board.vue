@@ -20,7 +20,7 @@
       </div>
     </header>
 
-    <aside class="nav" :class="{ 'stopwatch-running': isRunning.isRunning }">
+    <aside class="nav" :class="{ 'stopwatch-running': isRunning }">
       <nav-item
         v-for="(navItem, index) in navItems"
         :key="index"
@@ -57,9 +57,10 @@ import Board from '~/components/board/Board.vue'
 import NavItem from '~/components/board/NavItem.vue'
 import StopWatch from '~/components/board/StopWatch.vue'
 import { socket } from '~/util/socketio'
+import { DEFAULT_TIMER } from '~/store/timers'
 
 const { mapState: mapSessionsState } = createNamespacedHelpers('sessions')
-const { mapState: mapStopwatchState } = createNamespacedHelpers('stopwatch')
+const { mapState: mapTimersState } = createNamespacedHelpers('timers')
 
 export default {
   components: { NavItem, Board, StopWatch },
@@ -137,7 +138,11 @@ export default {
 
   computed: {
     ...mapSessionsState(['sessions']),
-    ...mapStopwatchState(['isRunning'])
+    ...mapTimersState(['timers']),
+
+    isRunning() {
+      return this.timers[DEFAULT_TIMER] && this.timers[DEFAULT_TIMER].mode === 1
+    }
   },
 
   created() {

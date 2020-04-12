@@ -20,9 +20,18 @@ const select = { session: 0 }
 
 // generate mongoose schema & model
 for (const key in definitions) {
-  const schema = new mongoose.Schema(definitions[key].schema, {
-    timestamps: true
-  })
+  const schema = new mongoose.Schema(
+    {
+      createdAt: Number,
+      updatedAt: Number,
+      ...definitions[key].schema
+    },
+    {
+      // timestamps: true
+      // Make Mongoose use Unix time (seconds since Jan 1, 1970)
+      timestamps: { currentTime: () => Math.floor(Date.now()) }
+    }
+  )
   models[key] = mongoose.model(key, schema)
   find[key] = {}
   find[key].init = definitions[key].find.init

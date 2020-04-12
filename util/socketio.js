@@ -13,18 +13,33 @@ const throttledEmit = throttle((event, payload) => {
 }, 100)
 
 const generalRestore = ({ name, actions, data, store }) => {
+  console.log('----name', name, data)
+  const now = Date.now()
   if (actions && actions[name] && actions[name].restore) {
     const newStore = {}
     data.forEach((item) => {
-      newStore[item.uuid] = item
+      newStore[item.uuid] = {
+        ...item,
+        __meta: {
+          ...item.__meta,
+          gotAt: now
+        }
+      }
     })
     store.commit(actions[name].restore, newStore)
   }
 }
 const generalPush = ({ name, actions, data, store }) => {
   console.log(`GET – ${name}`, data)
+  const now = Date.now()
   if (actions && actions[name] && actions[name].update) {
-    store.commit(actions[name].update, data)
+    store.commit(actions[name].update, {
+      ...data,
+      __meta: {
+        ...data.__meta,
+        gotAt: now
+      }
+    })
   }
 }
 
@@ -39,11 +54,16 @@ export default function liveSyncPlugin(conf) {
     socket.on('session:boot', (data) => {
       // sessionID = data.session
       socket.emit('cards:init')
-      socket.emit('textareas:init')
-      socket.emit('shapes:init')
       socket.emit('sessions:init')
       socket.emit('textareas:init')
       socket.emit('shapes:init')
+      socket.emit('timers:init')
+    })
+
+    socket.on('timers:restore', (data) => {
+      // eslint-disable-next-line no-console
+      console.log('--->>> timers restore', data)
+      generalRestore({ name: 'timers', actions, data, store })
     })
 
     socket.on('cards:restore', (data) => {
@@ -75,9 +95,13 @@ export default function liveSyncPlugin(conf) {
     })
 
     socket.on('cards:push', (data) => {
+      console.log('--->>> cards push', data)
       generalPush({ name: 'cards', actions, data, store })
     })
-
+    socket.on('timers:push', (data) => {
+      // store.commit('updateServerNow', data.meta.now)
+      generalPush({ name: 'timers', actions, data, store })
+    })
     socket.on('textareas:push', (data) => {
       generalPush({ name: 'textareas', actions, data, store })
     })

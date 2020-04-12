@@ -23,6 +23,19 @@ mongoose.connect(uri, {
   useNewUrlParser: true
 })
 
+const addMeta = (data, getter) => {
+  const now = Date.now()
+
+  return data.map((item) => {
+    return {
+      ...getter(item),
+      __meta: {
+        sentAt: now
+      }
+    }
+  })
+}
+
 io.on('connection', (socket) => {
   // once a client has connected, we expect to get a ping from them saying what room they want to join
   socket.on('session:join', (session) => {
@@ -47,7 +60,6 @@ io.on('connection', (socket) => {
         .find(FindFilters[key].init(session))
         .select({
           _id: 0,
-          updatedAt: 0,
           createdAt: 0,
           __v: 0,
           ...FindSelect[key]
@@ -57,8 +69,13 @@ io.on('connection', (socket) => {
         .exec((err, data) => {
           if (err) return console.error(err)
           // Send the last data to the user.
-          console.log(`${name}:restore`, session, data)
-          io.sockets.in(`user_${session}`).emit(`${name}:restore`, data)
+
+          const newData = addMeta(data, (item) =>
+            item.toObject({ getters: true })
+          )
+
+          console.log(`${name}:restore`, session, newData)
+          io.sockets.in(`user_${session}`).emit(`${name}:restore`, newData)
         })
     })
     // ----------------------------------
@@ -87,30 +104,11 @@ io.on('connection', (socket) => {
 
       // Notify all other users about a new state.
       console.log(`emit ${name}:push`)
-      io.sockets.in(`user_${session}`).emit(`${name}:push`, data)
+      io.sockets
+        .in(`user_${session}`)
+        .emit(`${name}:push`, addMeta([data], (item) => item)[0])
     })
   }
-
-  // Emit the stopwatch start
-  socket.on('stopwatch:mutation', (data) => {
-    const session = getSession(socket)
-
-    if (data.isRunning) {
-      // Notify all other users about the stopwatch start
-      io.sockets.in(`user_${session}`).emit('stopwatch:start')
-    } else {
-      // Notify all other users about the stopwatch stop
-      io.sockets.in(`user_${session}`).emit('stopwatch:stop')
-    }
-  })
-
-  // Emit the stopwatch reset
-  socket.on('stopwatch:reset', () => {
-    const session = getSession(socket)
-
-    // Notify all other users about the stopwatch reset
-    io.sockets.in(`user_${session}`).emit('stopwatch:reset')
-  })
 })
 
 http.listen(port, () => {

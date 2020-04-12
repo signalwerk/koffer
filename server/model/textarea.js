@@ -13,5 +13,5 @@ const find = {
     session
   })
 }
-const select = { session: 0 }
+const select = { updatedAt: 0, session: 0 }
 module.exports = { schema, find, select }
