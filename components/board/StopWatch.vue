@@ -74,11 +74,19 @@ export default {
         return this.timers[DEFAULT_TIMER].value || 0
       }
 
+      // wait for info from server
+      if (
+        !this.timers[DEFAULT_TIMER].__meta ||
+        !this.timers[DEFAULT_TIMER].__meta.gotAt
+      ) {
+        return 0
+      }
+
       const sinceUpdate = Date.now() - this.timers[DEFAULT_TIMER].__meta.gotAt
 
-      // const timeOffset =
-      //   this.timers[DEFAULT_TIMER].__meta.sentAt -
-      //   this.timers[DEFAULT_TIMER].__meta.gotAt
+      const timeOffset =
+        this.timers[DEFAULT_TIMER].__meta.sentAt -
+        this.timers[DEFAULT_TIMER].updatedAt
 
       // console.log({
       //   sentAt: this.timers[DEFAULT_TIMER].__meta.sentAt,
@@ -88,13 +96,10 @@ export default {
       //     this.timers[DEFAULT_TIMER].updatedAt,
       //   clientNowOnUpdate: this.clientNowOnUpdate
       // })
+      console.log(this.timeElapsed)
 
-      console.log({
-        sinceUpdate,
-        timeElapsed: this.timeElapsed
-      })
-
-      const newTimer = sinceUpdate + this.timers[DEFAULT_TIMER].value
+      const newTimer =
+        this.timers[DEFAULT_TIMER].value + timeOffset + sinceUpdate
 
       return newTimer
     }
@@ -123,16 +128,19 @@ export default {
 
   methods: {
     start() {
-      this.$store.dispatch('timers/updateMode', {
+      console.log('this.timer', this.timer)
+      this.timeElapsed = 0
+      this.$store.dispatch('timers/updateTimer', {
         uuid: DEFAULT_TIMER,
-        mode: 1
+        mode: 1,
+        value: this.timer
       })
     },
 
     stop() {
       console.log('----- method run stop')
 
-      this.$store.dispatch('timers/updateMode', {
+      this.$store.dispatch('timers/updateTimer', {
         uuid: DEFAULT_TIMER,
         mode: 0,
         value: this.timer
@@ -151,7 +159,7 @@ export default {
     },
 
     reset() {
-      this.$store.dispatch('timers/updateMode', {
+      this.$store.dispatch('timers/updateTimer', {
         uuid: DEFAULT_TIMER,
         mode: 0,
         value: 0

@@ -23,12 +23,12 @@ mongoose.connect(uri, {
   useNewUrlParser: true
 })
 
-const addMeta = (data, getter) => {
+const addMeta = (data) => {
   const now = Date.now()
 
   return data.map((item) => {
     return {
-      ...getter(item),
+      ...item.toObject({ getters: true }),
       __meta: {
         sentAt: now
       }
@@ -70,9 +70,7 @@ io.on('connection', (socket) => {
           if (err) return console.error(err)
           // Send the last data to the user.
 
-          const newData = addMeta(data, (item) =>
-            item.toObject({ getters: true })
-          )
+          const newData = addMeta(data)
 
           console.log(`${name}:restore`, session, newData)
           io.sockets.in(`user_${session}`).emit(`${name}:restore`, newData)
@@ -100,13 +98,12 @@ io.on('connection', (socket) => {
         }
         // do something with the document
         // console.log('findOneAndUpdate', result)
+        // Notify all other users about a new state.
+        console.log(`emit ${name}:push`)
+        io.sockets
+          .in(`user_${session}`)
+          .emit(`${name}:push`, addMeta([result])[0])
       })
-
-      // Notify all other users about a new state.
-      console.log(`emit ${name}:push`)
-      io.sockets
-        .in(`user_${session}`)
-        .emit(`${name}:push`, addMeta([data], (item) => item)[0])
     })
   }
 })

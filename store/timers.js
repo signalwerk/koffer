@@ -16,20 +16,26 @@ export const state = () => ({
 })
 
 export const actions = {
-  updateMode({ commit, dispatch }, payload) {
-    commit('updateMode', payload)
+  updateTimer({ commit, dispatch }, payload) {
+    commit('updateTimer', payload)
   }
 }
 
 export const mutations = {
-  updateMode(state, { uuid, mode }) {
+  updateTimer(state, { uuid, mode, value }) {
     // state.clientNowOnUpdate = Date.now()
 
-    console.log('--- mutations updateMode', mode)
-    state.timers[uuid] = {
+    console.log('--- mutations updateTimer', mode)
+
+    Vue.set(state.timers, uuid, {
       ...state.timers[uuid],
-      mode
-    }
+      // __meta: {
+      //   ...state.timers[uuid].__meta,
+      //   gotAt: Date.now()
+      // },
+      mode,
+      value: (state.timers[uuid] && state.timers[uuid].value) || 0
+    })
   },
 
   nosync_restore(state, timers) {
