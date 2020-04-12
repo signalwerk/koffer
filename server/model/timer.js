@@ -1,4 +1,7 @@
 const schema = {
+  createdAt: Number,
+  updatedAt: Number,
+
   uuid: String,
   deleted: Boolean,
   session: String,
