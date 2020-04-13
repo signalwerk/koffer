@@ -36,6 +36,9 @@ const addMeta = (data) => {
   })
 }
 
+// serve statoc files
+// app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
+
 io.on('connection', (socket) => {
   // once a client has connected, we expect to get a ping from them saying what room they want to join
   socket.on('session:join', (session) => {
@@ -109,5 +112,6 @@ io.on('connection', (socket) => {
 })
 
 http.listen(port, () => {
-  console.log('listening on *:' + port)
+  console.log('listening on port: ' + port)
+  console.log('mongo-db: ' + uri)
 })
