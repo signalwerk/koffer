@@ -39,6 +39,8 @@ const addMeta = (data) => {
 // serve statoc files
 // app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
 
+app.get('/', (req, res) => res.send('Place Server'))
+
 io.on('connection', (socket) => {
   // once a client has connected, we expect to get a ping from them saying what room they want to join
   socket.on('session:join', (session) => {

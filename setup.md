@@ -1,21 +1,17 @@
-
-
-
-
 ## Docker
 
-## build app image
+### build app image
 
 ```sh
 docker build -t weplace .
 ```
 
-## check image
+### check image
 ```sh
 docker images
 ```
 
-## run app image
+### run app image
 
 ```sh
 # create network
@@ -37,4 +33,32 @@ docker run \
   -e PORT=5000 \
   weplace
 
+```
+
+## Kubernetes
+
+### Install CLI & local cluster
+```sh
+brew install kubectl
+brew install minikube
+```
+
+
+### Start local cluster
+```sh
+minikube start --driver=virtualbox
+```
+
+### Apply to local cluster
+```sh
+kubectl apply -f kube
+```
+
+### Watch status
+```sh
+kubectl get pods --watch
+```
+### Access
+```sh
+minikube service weplace
 ```
