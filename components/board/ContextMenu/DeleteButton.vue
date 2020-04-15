@@ -1,6 +1,6 @@
 <template>
   <button @click="callback" class="button-like">
-    <icon icon="close" size="small" />
+    <icon icon="delete" size="medium" />
   </button>
 </template>
 

@@ -27,7 +27,7 @@
           />
         </div>
         <button @click="deleteTextarea">
-          <icon icon="close" size="small" />
+          <icon icon="delete" size="medium" />
         </button>
       </div>
     </Moveable>

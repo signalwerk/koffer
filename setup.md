@@ -62,3 +62,8 @@ kubectl get pods --watch
 ```sh
 minikube service weplace
 ```
+
+### Stop local cluster
+```sh
+minikube stop
+```

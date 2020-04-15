@@ -8,6 +8,7 @@
 import iconArrow from '~/assets/icons/iconArrow.svg'
 import iconArtboard from '~/assets/icons/iconArtboard.svg'
 import iconClose from '~/assets/icons/iconClose.svg'
+import iconDelete from '~/assets/icons/iconDelete.svg'
 import iconDraw from '~/assets/icons/iconDraw.svg'
 import iconEraser from '~/assets/icons/iconEraser.svg'
 import iconExport from '~/assets/icons/iconExport.svg'
@@ -62,6 +63,8 @@ export default {
             return iconArtboard
           case 'close':
             return iconClose
+          case 'delete':
+            return iconDelete
           case 'draw':
             return iconDraw
           case 'eraser':
