@@ -25,6 +25,7 @@
     "nuxt": "^2.0.0",
     "nuxt-clipboard2": "^0.2.1",
     "nuxt-material-design-icons": "^1.0.4",
+    "portal-vue": "^2.1.7",
     "socket.io-client": "^2.3.0",
     "uuid": "^7.0.3",
     "v-tooltip": "^2.0.3",

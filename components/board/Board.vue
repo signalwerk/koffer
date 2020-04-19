@@ -62,9 +62,6 @@ export default {
 * {
   box-sizing: border-box;
 }
-.Board {
-  background-color: #f8f8fc;
-}
 .ShapeList,
 .CardList,
 .TextareaList {

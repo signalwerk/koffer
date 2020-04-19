@@ -41,13 +41,14 @@ import { mixin as clickaway } from 'vue-clickaway'
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
 import Icon from '~/components/Icon'
+import zoomAwareMixin from '~/mixins/zoomAware'
 
 export default {
   components: {
     Moveable,
     Icon
   },
-  mixins: [clickaway],
+  mixins: [clickaway, zoomAwareMixin],
   props: {
     value: {
       type: Object,
@@ -124,8 +125,8 @@ export default {
     },
 
     handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
-      const x = this.x + delta[0]
-      const y = this.y + delta[1]
+      const x = this.x + delta[0] / this.zoomLevel
+      const y = this.y + delta[1] / this.zoomLevel
 
       this.x = x
       this.y = y

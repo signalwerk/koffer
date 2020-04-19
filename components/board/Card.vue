@@ -26,10 +26,12 @@
       </div>
       <debug-info :visible="false" :dump="value" />
     </Moveable>
-    <context-menu :visible="isEditing">
-      <color-picker :value="value.color" @input="handleColorChange" />
-      <delete-button :callback="deleteCard" />
-    </context-menu>
+    <portal to="context-menu" v-if="isEditing">
+      <context-menu :visible="isEditing">
+        <color-picker :value="value.color" @input="handleColorChange" />
+        <delete-button :callback="deleteCard" />
+      </context-menu>
+    </portal>
   </div>
 </template>
 
@@ -38,12 +40,12 @@
 import { mixin as clickaway } from 'vue-clickaway'
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
-
+import zoomAwareMixin from '~/mixins/zoomAware'
 import { COLORS } from '~/store/cards'
 
 export default {
   components: { Moveable },
-  mixins: [clickaway],
+  mixins: [clickaway, zoomAwareMixin],
   props: {
     value: {
       type: Object,
@@ -115,8 +117,8 @@ export default {
     },
 
     handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
-      const x = this.x + delta[0]
-      const y = this.y + delta[1]
+      const x = this.x + delta[0] / this.zoomLevel
+      const y = this.y + delta[1] / this.zoomLevel
 
       this.x = x
       this.y = y

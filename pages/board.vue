@@ -8,7 +8,13 @@
         }}
       </div>
       <div>
-        View: 100%
+        Zoom: {{ Math.round(zoomLevel * 100) }}%
+        <button
+          @click="zoomReset"
+          class="button button--secondary invite-button bold"
+        >
+          Reset
+        </button>
       </div>
       <div>
         <span class="participants-dropdown">
@@ -20,7 +26,7 @@
       </div>
     </header>
 
-    <aside class="nav" :class="{ 'stopwatch-running': isRunning }">
+    <aside :class="{ 'stopwatch-running': isRunning }" class="nav">
       <nav-item
         v-for="(navItem, index) in navItems"
         :key="index"
@@ -43,11 +49,14 @@
       <stop-watch v-show="hasStopwatch" class="context" />
     </transition>
 
-    <board
-      ref="board"
-      @contextOpen.capture="hasStopwatch = false"
-      class="board"
-    />
+    <div @wheel.capture.prevent="zoom" class="board">
+      <portal-target name="context-menu" />
+      <board
+        ref="board"
+        @contextOpen.capture="hasStopwatch = false"
+        :style="boardScale"
+      />
+    </div>
   </div>
 </template>
 
@@ -58,12 +67,15 @@ import NavItem from '~/components/board/NavItem.vue'
 import StopWatch from '~/components/board/StopWatch.vue'
 import { socket } from '~/util/socketio'
 import { DEFAULT_TIMER } from '~/store/timers'
+import zoomAwareMixin from '~/mixins/zoomAware'
 
 const { mapState: mapSessionsState } = createNamespacedHelpers('sessions')
 const { mapState: mapTimersState } = createNamespacedHelpers('timers')
 
 export default {
   components: { NavItem, Board, StopWatch },
+
+  mixins: [zoomAwareMixin],
 
   transition: {
     name: 'slide-fade',
@@ -142,6 +154,10 @@ export default {
 
     isRunning() {
       return this.timers[DEFAULT_TIMER] && this.timers[DEFAULT_TIMER].mode === 1
+    },
+
+    boardScale() {
+      return `transform: scale(${this.zoomLevel})`
     }
   },
 
@@ -170,6 +186,21 @@ export default {
 
     toggleStopwatch() {
       this.hasStopwatch = !this.hasStopwatch
+    },
+
+    zoom(event) {
+      let scale = this.zoomLevel
+
+      scale += event.deltaY * -0.001
+
+      // Restrict scale
+      scale = Math.min(Math.max(0.05, scale), 5)
+
+      this.$store.dispatch('artboardPositioning/updateZoomLevel', scale)
+    },
+
+    zoomReset() {
+      this.$store.dispatch('artboardPositioning/updateZoomLevel', 1.0)
     }
   }
 }
@@ -237,8 +268,13 @@ export default {
 }
 
 .board {
+  background-color: #f8f8fc;
   overflow: hidden;
   grid-area: main;
+  .Board {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .stopwatch-running .stopwatch-icon {

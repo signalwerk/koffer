@@ -17,12 +17,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.Context-menu {
-  transform: translate(-50vw, -50vh);
-}
 .Context-menuInner {
   left: 50%;
-  top: 24px;
   transform: translateX(-50%);
   display: flex;
 }

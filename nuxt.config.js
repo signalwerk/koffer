@@ -152,7 +152,8 @@ export default {
     'nuxt-material-design-icons',
     'nuxt-clipboard2',
     '@nuxtjs/toast',
-    '~/module/v-tooltip.js'
+    '~/module/v-tooltip.js',
+    'portal-vue/nuxt'
   ],
   /*
    ** Axios module configuration

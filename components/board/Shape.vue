@@ -23,10 +23,13 @@
       </svg>
       <debug-info :visible="false" :dump="value" />
     </Moveable>
-    <context-menu :visible="isEditing">
-      <shape-picker :value="value.shape" @input="handleUpdateShape" />
-      <delete-button :callback="deleteShape" />
-    </context-menu>
+
+    <portal to="context-menu" v-if="isEditing">
+      <context-menu :visible="isEditing">
+        <shape-picker :value="value.shape" @input="handleUpdateShape" />
+        <delete-button :callback="deleteShape" />
+      </context-menu>
+    </portal>
   </div>
 </template>
 
@@ -37,10 +40,11 @@ import { mixin as clickaway } from 'vue-clickaway'
 import Moveable from 'vue-moveable'
 
 import { SHAPES } from '~/store/shapes'
+import zoomAwareMixin from '~/mixins/zoomAware'
 
 export default {
   components: { Moveable },
-  mixins: [clickaway],
+  mixins: [clickaway, zoomAwareMixin],
   props: {
     value: {
       type: Object,
@@ -85,15 +89,15 @@ export default {
       this.$store.dispatch('shapes/updateShape', { uuid, shape })
     },
     handleEditStart() {
-      this.$data.isEditing = true
+      this.isEditing = true
       this.$emit('contextOpen')
     },
     handleEditEnd() {
-      this.$data.isEditing = false
+      this.isEditing = false
     },
     handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
-      const x = this.x + delta[0]
-      const y = this.y + delta[1]
+      const x = this.x + delta[0] / this.zoomLevel
+      const y = this.y + delta[1] / this.zoomLevel
 
       this.x = x
       this.y = y
