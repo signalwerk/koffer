@@ -24,8 +24,8 @@
       <debug-info :visible="false" :dump="value" />
     </Moveable>
 
-    <portal to="context-menu" v-if="isEditing">
-      <context-menu :visible="isEditing">
+    <portal v-if="isEditing" to="context-menu">
+      <context-menu ref="contextMenu" :visible="isEditing">
         <shape-picker :value="value.shape" @input="handleUpdateShape" />
         <delete-button :callback="deleteShape" />
       </context-menu>
@@ -93,7 +93,14 @@ export default {
       this.isEditing = true
       this.$emit('contextOpen')
     },
-    handleEditEnd() {
+    handleEditEnd(e) {
+      if (
+        this.$refs.contextMenu &&
+        e.target.closest('.Context-menu') === this.$refs.contextMenu.$el
+      ) {
+        return
+      }
+
       this.isEditing = false
     },
     handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {

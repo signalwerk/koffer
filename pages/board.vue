@@ -369,4 +369,8 @@ export default {
 .stopwatch-running .stopwatch-icon {
   animation: pulse 1s infinite;
 }
+
+.TextareaList-item {
+  position: absolute;
+}
 </style>

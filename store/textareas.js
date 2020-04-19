@@ -15,6 +15,7 @@ export const actions = {
       x: 0,
       y: 0,
       text: 'Text',
+      size: 16,
       ...payload
     }
 
@@ -31,6 +32,11 @@ export const actions = {
 
   updateTextareaPosition({ commit, dispatch }, payload) {
     commit('updateTextareaPosition', payload)
+  },
+
+  updateTextareaSize({ commit, dispatch }, payload) {
+    console.log(payload)
+    commit('updateTextareaSize', payload)
   },
 
   deleteTextarea({ commit, dispatch }, payload) {
@@ -80,6 +86,10 @@ export const mutations = {
   updateTextareaPosition(state, { uuid, x, y }) {
     state.textareas[uuid].x = x
     state.textareas[uuid].y = y
+  },
+
+  updateTextareaSize(state, { uuid, size }) {
+    state.textareas[uuid].size = size
   },
 
   /**

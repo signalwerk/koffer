@@ -13,6 +13,7 @@
         <div
           v-show="!isEditing"
           @click="handleEditStart"
+          :style="fontSize"
           class="Textarea--Text"
         >
           {{ value.text }}
@@ -24,13 +25,17 @@
             @change="handleEditEnd"
             @keydown.enter="handleEditEnd"
             :value="value.text"
+            :style="fontSize"
           />
         </div>
-        <button @click="deleteTextarea">
-          <icon icon="delete" size="medium" />
-        </button>
       </div>
     </Moveable>
+    <portal v-if="isEditing" to="context-menu">
+      <context-menu ref="contextMenu" :visible="isEditing">
+        <size-picker @sizeChange="handleSizeChange" />
+        <delete-button :callback="deleteTextarea" />
+      </context-menu>
+    </portal>
   </div>
 </template>
 
@@ -40,13 +45,11 @@ import { mixin as clickaway } from 'vue-clickaway'
 
 // https://vuejsexamples.com/a-vue-component-that-create-moveable-and-resizable/
 import Moveable from 'vue-moveable'
-import Icon from '~/components/Icon'
 import positionAwareMixin from '~/mixins/positionAware'
 
 export default {
   components: {
-    Moveable,
-    Icon
+    Moveable
   },
   mixins: [clickaway, positionAwareMixin],
   props: {
@@ -73,6 +76,11 @@ export default {
       return {
         transform: `translate(${x}px, ${y}px)`
       }
+    },
+
+    fontSize() {
+      return `font-size: ${this.value.size}px; line-height: ${this.value.size +
+        8}px; height: ${this.value.size + 8}px; width: auto;`
     }
   },
   methods: {
@@ -82,17 +90,11 @@ export default {
       this.isDraging = true
       this.$emit('contextOpen')
     },
+
     handleDragEnd() {
       this.isDraging = false
     },
-    handleColorChange(color) {
-      const { uuid } = this.value
-      const { value: text } = this.$refs.inputText
-      this.$store.dispatch('textareas/updateTextareaColor', {
-        uuid,
-        text
-      })
-    },
+
     handleEditStart() {
       this.isEditing = true
       this.$nextTick(() => {
@@ -101,7 +103,14 @@ export default {
       })
     },
 
-    handleEditEnd() {
+    handleEditEnd(e) {
+      if (
+        this.$refs.contextMenu &&
+        e.target.closest('.Context-menu') === this.$refs.contextMenu.$el
+      ) {
+        return
+      }
+
       const uuid = this.value.uuid
       const text = this.$refs.inputText.value
 
@@ -112,7 +121,15 @@ export default {
       })
     },
 
-    deleteTextarea(id) {
+    handleSizeChange(changeValue) {
+      const uuid = this.value.uuid
+      console.log(this.value.size, changeValue)
+      const size = this.value.size + changeValue
+
+      this.$store.dispatch('textareas/updateTextareaSize', { uuid, size })
+    },
+
+    deleteTextarea() {
       this.$store.dispatch('textareas/deleteTextarea', {
         uuid: this.value.uuid,
         deleted: true
@@ -141,24 +158,6 @@ export default {
 <style lang="scss" scoped>
 $button-size: 22px;
 
-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  appearance: none;
-  background: transparent;
-  border: none;
-  padding: 5px;
-  width: $button-size;
-  height: $button-size;
-  margin-left: 10px;
-  cursor: pointer;
-
-  transition: opacity ease-in-out 300ms;
-
-  opacity: 0;
-}
-
 .TextArea:hover button {
   opacity: 1;
 }
@@ -170,6 +169,9 @@ input {
 .Textarea--inner {
   display: flex;
   align-items: center;
+}
+.Textarea--Text {
+  user-select: none;
 }
 </style>
 

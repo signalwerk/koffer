@@ -3,6 +3,7 @@ const schema = {
   deleted: Boolean,
   session: String,
   text: String,
+  size: Number,
   x: Number,
   y: Number
 }

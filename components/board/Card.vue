@@ -26,8 +26,8 @@
       </div>
       <debug-info :visible="false" :dump="value" />
     </Moveable>
-    <portal to="context-menu" v-if="isEditing">
-      <context-menu :visible="isEditing">
+    <portal v-if="isEditing" to="context-menu">
+      <context-menu ref="contextMenu" :visible="isEditing">
         <color-picker :value="value.color" @input="handleColorChange" />
         <delete-button :callback="deleteCard" />
       </context-menu>
@@ -97,7 +97,14 @@ export default {
       })
     },
 
-    handleEditEnd() {
+    handleEditEnd(e) {
+      if (
+        this.$refs.contextMenu &&
+        e.target.closest('.Context-menu') === this.$refs.contextMenu.$el
+      ) {
+        return
+      }
+
       this.isEditing = false
       const { uuid } = this.value
       const { value: text } = this.$refs.inputText
