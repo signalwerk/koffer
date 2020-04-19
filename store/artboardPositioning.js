@@ -1,12 +1,12 @@
 export const state = () => ({
-  zoomLevel: 1.0,
+  zoomFactor: 1.0,
   deltaX: 0,
   deltaY: 0
 })
 
 export const mutations = {
-  updateZoomLevel(state, zoomLevel) {
-    state.zoomLevel = zoomLevel
+  updateZoomFactor(state, zoomFactor) {
+    state.zoomFactor = zoomFactor
   },
 
   updateDeltaX(state, deltaX) {
@@ -19,8 +19,8 @@ export const mutations = {
 }
 
 export const actions = {
-  updateZoomLevel({ commit }, payload) {
-    commit('updateZoomLevel', payload)
+  updateZoomFactor({ commit }, payload) {
+    commit('updateZoomFactor', payload)
   },
 
   addDeltaX({ commit }, payload) {

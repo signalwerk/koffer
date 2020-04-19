@@ -5,6 +5,6 @@ const { mapState: mapArtboardPositioningState } = createNamespacedHelpers(
 
 export default {
   computed: {
-    ...mapArtboardPositioningState(['zoomLevel', 'deltaX', 'deltaY'])
+    ...mapArtboardPositioningState(['zoomFactor', 'deltaX', 'deltaY'])
   }
 }

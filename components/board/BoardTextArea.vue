@@ -126,8 +126,8 @@ export default {
     },
 
     handleDrag({ transform, beforeDelta, beforeDist, delta, dist }) {
-      const x = this.x + delta[0] / this.zoomLevel
-      const y = this.y + delta[1] / this.zoomLevel
+      const x = this.x + delta[0] / this.zoomFactor
+      const y = this.y + delta[1] / this.zoomFactor
 
       this.x = x
       this.y = y

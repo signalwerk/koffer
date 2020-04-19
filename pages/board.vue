@@ -14,7 +14,7 @@
         }}
       </div>
       <div>
-        Zoom: {{ Math.round(zoomLevel * 100) }}%
+        Zoom: {{ Math.round(zoomFactor * 100) }}%
         <button
           @click="zoomReset"
           class="button button--secondary invite-button bold"
@@ -170,7 +170,7 @@ export default {
     },
 
     boardScale() {
-      return `transform: scale(${this.zoomLevel})`
+      return `transform: scale(${this.zoomFactor})`
     }
   },
 
@@ -206,14 +206,14 @@ export default {
     },
 
     zoom(event) {
-      let scale = this.zoomLevel
+      let scale = this.zoomFactor
 
       scale += event.deltaY * -0.001
 
       // Restrict scale
       scale = Math.min(Math.max(0.05, scale), 5)
 
-      this.$store.dispatch('artboardPositioning/updateZoomLevel', scale)
+      this.$store.dispatch('artboardPositioning/updateZoomFactor', scale)
     },
 
     stopPanning() {
@@ -225,7 +225,7 @@ export default {
     },
 
     zoomReset() {
-      this.$store.dispatch('artboardPositioning/updateZoomLevel', 1.0)
+      this.$store.dispatch('artboardPositioning/updateZoomFactor', 1.0)
     },
 
     openContextHandler() {
@@ -247,11 +247,11 @@ export default {
       if (this.isPanning) {
         this.$store.dispatch(
           'artboardPositioning/addDeltaX',
-          e.movementX / this.zoomLevel
+          e.movementX / this.zoomFactor
         )
         this.$store.dispatch(
           'artboardPositioning/addDeltaY',
-          e.movementY / this.zoomLevel
+          e.movementY / this.zoomFactor
         )
       }
     }
