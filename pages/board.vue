@@ -1,5 +1,11 @@
 <template>
-  <div class="board-container">
+  <div
+    :class="{
+      'panning-board-container': panningActive,
+      'is-panning': isPanning
+    }"
+    class="board-container"
+  >
     <header class="header">
       <div class="bold">
         {{
@@ -49,11 +55,17 @@
       <stop-watch v-show="hasStopwatch" class="context" />
     </transition>
 
-    <div @wheel.capture.prevent="zoom" class="board">
+    <div
+      @wheel.capture.prevent="zoom"
+      @mousedown="panStart"
+      @mouseup="panEnd"
+      @mousemove="pan"
+      class="board"
+    >
       <portal-target name="context-menu" />
       <board
         ref="board"
-        @contextOpen.capture="hasStopwatch = false"
+        @contextOpen.capture="openContextHandler"
         :style="boardScale"
       />
     </div>
@@ -67,7 +79,7 @@ import NavItem from '~/components/board/NavItem.vue'
 import StopWatch from '~/components/board/StopWatch.vue'
 import { socket } from '~/util/socketio'
 import { DEFAULT_TIMER } from '~/store/timers'
-import zoomAwareMixin from '~/mixins/zoomAware'
+import positionAwareMixin from '~/mixins/positionAware'
 
 const { mapState: mapSessionsState } = createNamespacedHelpers('sessions')
 const { mapState: mapTimersState } = createNamespacedHelpers('timers')
@@ -75,7 +87,7 @@ const { mapState: mapTimersState } = createNamespacedHelpers('timers')
 export default {
   components: { NavItem, Board, StopWatch },
 
-  mixins: [zoomAwareMixin],
+  mixins: [positionAwareMixin],
 
   transition: {
     name: 'slide-fade',
@@ -86,14 +98,15 @@ export default {
     return {
       activeTool: 'select',
       hasStopwatch: false,
-      color: null,
+      panningActive: false,
+      isPanning: false,
       navItems: [
         {
           item: 'select',
           name: 'Select something',
           disabled: false,
           classes: {},
-          handler: () => {}
+          handler: this.stopPanning
         },
         {
           item: 'sticky-note',
@@ -125,10 +138,10 @@ export default {
         },
         {
           item: 'artboard',
-          name: 'Coming soon',
-          disabled: true,
+          name: 'Pan artboard',
+          disabled: false,
           classes: {},
-          handler: () => {}
+          handler: this.togglePanning
         },
         {
           item: 'draw',
@@ -173,18 +186,22 @@ export default {
 
   methods: {
     addShape() {
+      this.stopPanning()
       this.$refs.board.addShape()
     },
 
     addSticky() {
+      this.stopPanning()
       this.$refs.board.addCard()
     },
 
     addTextarea() {
+      this.stopPanning()
       this.$refs.board.addTextarea()
     },
 
     toggleStopwatch() {
+      this.stopPanning()
       this.hasStopwatch = !this.hasStopwatch
     },
 
@@ -199,8 +216,44 @@ export default {
       this.$store.dispatch('artboardPositioning/updateZoomLevel', scale)
     },
 
+    stopPanning() {
+      this.panningActive = false
+    },
+
+    togglePanning() {
+      this.panningActive = !this.panningActive
+    },
+
     zoomReset() {
       this.$store.dispatch('artboardPositioning/updateZoomLevel', 1.0)
+    },
+
+    openContextHandler() {
+      this.hasStopwatch = false
+      this.stopPanning()
+    },
+
+    panStart(e) {
+      if (this.panningActive) {
+        this.isPanning = true
+      }
+    },
+
+    panEnd() {
+      this.isPanning = false
+    },
+
+    pan(e) {
+      if (this.isPanning) {
+        this.$store.dispatch(
+          'artboardPositioning/addDeltaX',
+          e.movementX / this.zoomLevel
+        )
+        this.$store.dispatch(
+          'artboardPositioning/addDeltaY',
+          e.movementY / this.zoomLevel
+        )
+      }
     }
   }
 }
@@ -218,6 +271,14 @@ export default {
   grid-template-areas:
     'header header'
     'sidebar main';
+}
+
+.panning-board-container {
+  cursor: grab;
+
+  &.is-panning {
+    cursor: grabbing;
+  }
 }
 
 .header {

@@ -17,7 +17,10 @@
         :key="id"
         class="TextareaList-item"
       >
-        <board-text-area :value="textarea" />
+        <board-text-area
+          :value="textarea"
+          @contextOpen="$emit('contextOpen')"
+        />
       </div>
     </div>
   </div>
