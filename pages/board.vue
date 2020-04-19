@@ -187,17 +187,41 @@ export default {
   methods: {
     addShape() {
       this.stopPanning()
+
+      const zoomBackup = this.zoomFactor
+      this.zoomReset()
+
       this.$refs.board.addShape()
+
+      this.$nextTick(() => {
+        this.setZoom(zoomBackup)
+      })
     },
 
     addSticky() {
       this.stopPanning()
+
+      const zoomBackup = this.zoomFactor
+      this.zoomReset()
+
       this.$refs.board.addCard()
+
+      this.$nextTick(() => {
+        this.setZoom(zoomBackup)
+      })
     },
 
     addTextarea() {
       this.stopPanning()
+
+      const zoomBackup = this.zoomFactor
+      this.zoomReset()
+
       this.$refs.board.addTextarea()
+
+      this.$nextTick(() => {
+        this.setZoom(zoomBackup)
+      })
     },
 
     toggleStopwatch() {
@@ -213,7 +237,15 @@ export default {
       // Restrict scale
       scale = Math.min(Math.max(0.05, scale), 5)
 
-      this.$store.dispatch('artboardPositioning/updateZoomFactor', scale)
+      this.setZoom(scale)
+    },
+
+    zoomReset() {
+      this.setZoom(1.0)
+    },
+
+    setZoom(zoomFactor) {
+      this.$store.dispatch('artboardPositioning/updateZoomFactor', zoomFactor)
     },
 
     stopPanning() {
@@ -222,10 +254,6 @@ export default {
 
     togglePanning() {
       this.panningActive = !this.panningActive
-    },
-
-    zoomReset() {
-      this.$store.dispatch('artboardPositioning/updateZoomFactor', 1.0)
     },
 
     openContextHandler() {
